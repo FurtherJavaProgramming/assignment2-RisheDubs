@@ -1,15 +1,22 @@
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.geometry.Insets;
 import javafx.stage.Stage;
 
 public class Login extends Application {
-    private UserManager userManager = new UserManager();  // UserManager instance to manage users
 
     @Override
     public void start(Stage primaryStage) {
+        // Set the login scene on the primary stage
+        primaryStage.setScene(getLoginScene(primaryStage));
+        primaryStage.setTitle("Login - Bookstore App");
+        primaryStage.show();
+    }
+
+    // Method to generate the login scene
+    public static Scene getLoginScene(Stage primaryStage) {
         // Create labels and input fields
         Label usernameLabel = new Label("Username:");
         TextField usernameField = new TextField();
@@ -23,7 +30,7 @@ public class Login extends Application {
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            handleLogin(username, password, messageLabel);
+            handleLogin(username, password, messageLabel, primaryStage);  // Call the handleLogin method on button click
         });
 
         // Create registration link
@@ -45,30 +52,36 @@ public class Login extends Application {
         gridPane.add(messageLabel, 1, 3);
         gridPane.add(registerLink, 1, 4);
 
-        // Scene setup
-        Scene scene = new Scene(gridPane, 300, 200);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Login - Bookstore App");
-        primaryStage.show();
+        // Return the login scene
+        return new Scene(gridPane, 300, 200);
     }
 
-    private void handleLogin(String username, String password, Label messageLabel) {
-        // Using UserManager to authenticate the user
-        if (userManager.authenticate(username, password)) {
-            User user = userManager.getUser(username);
-            messageLabel.setText("Login successful: " + user.getRole());
-            // Load the appropriate dashboard based on user role (will implement later)
+    // The handleLogin method
+    private static void handleLogin(String username, String password, Label messageLabel, Stage primaryStage) {
+        // Simulating a successful login
+        if (username.equals("user") && password.equals("password")) {
+            // On successful login, navigate to the User Dashboard
+            messageLabel.setText("Login successful! Redirecting...");
+
+            // Create the User object (you can update this later to pull from a database)
+            User loggedInUser = new User(username, password, "user");
+
+            // Redirect to the User Dashboard
+            UserDashboard userDashboard = new UserDashboard(primaryStage, loggedInUser);
+            userDashboard.display();
+
         } else {
-            messageLabel.setText("Invalid credentials.");
+            // Show an error message on failed login
+            messageLabel.setText("Invalid credentials. Please try again.");
         }
     }
 
-    private void handleRegistration() {
-        // Logic to open a registration screen (to be implemented later)
+    private static void handleRegistration() {
         System.out.println("Opening registration form...");
     }
 
+    // Main method to launch JavaFX application
     public static void main(String[] args) {
-        launch(args);
+        launch(args);  // Launch the JavaFX application
     }
 }
