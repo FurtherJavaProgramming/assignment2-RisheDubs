@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UserDashboardController">
+    <Label text="Welcome to the User Dashboard!" />
+    <Button text="View Books" onAction="#viewBooks"/>
+    <Button text="Shopping Cart" onAction="#shoppingCart"/>
+    <Button text="Logout" onAction="#logout"/>
+</VBox>

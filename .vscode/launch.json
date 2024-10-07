@@ -5,7 +5,7 @@
       "type": "java",
       "name": "Launch Login JavaFX App",
       "request": "launch",
-      "mainClass": "Login",  // Your Login.java main class
+      "mainClass": "view.Login",  // Fully qualified class name
       "projectName": "JA2_79063161",
       "vmArgs": "--module-path \"C:/Users/Rishekesh.B/Downloads/openjfx-19.0.2_windows-x64_bin-sdk/javafx-sdk-19.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
     },
@@ -13,7 +13,7 @@
       "type": "java",
       "name": "Launch Main JavaFX App",
       "request": "launch",
-      "mainClass": "Main",  // If you have another entry point called Main.java
+      "mainClass": "view.Main",  // Ensure the Main class has correct package name
       "projectName": "JA2_79063161",
       "vmArgs": "--module-path \"C:/Users/Rishekesh.B/Downloads/openjfx-19.0.2_windows-x64_bin-sdk/javafx-sdk-19.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
     }
