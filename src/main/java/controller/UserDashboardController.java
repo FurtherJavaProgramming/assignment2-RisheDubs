@@ -1,28 +1,21 @@
 package controller;
 
-import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class UserDashboardController {
 
     private Stage primaryStage;
 
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public void setPrimaryStage(Stage stage) {
+        this.primaryStage = stage;
     }
 
-    @FXML
-    public void viewBooks() {
-        // Implement logic for viewing books
-    }
-
-    @FXML
-    public void showShoppingCart() {
-        // Implement logic for showing shopping cart
-    }
-
-    @FXML
-    public void logout() {
-        // Implement logic for logging out
+    public void display() throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/user_dashboard.fxml"));
+        Scene scene = new Scene(loader.load());
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }

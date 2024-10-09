@@ -1,69 +1,47 @@
 package controller;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.stage.Stage;
+import model.Admin;
+import model.Customer;
 import model.User;
+import service.user.UserService;
+import view.AdminDashboard;
+import view.UserDashboard;
+import injector.DependencyInjector;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 
 public class LoginController {
+    private UserService userService;
 
     @FXML
     private TextField usernameField;
 
     @FXML
-    private PasswordField passwordField;
+    private TextField passwordField;
 
-    @FXML
-    private Label messageLabel;
-
-    private Stage primaryStage;
-
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public LoginController() {
+        this.userService = DependencyInjector.getUserService();
     }
 
     @FXML
-    public void handleLogin() {
+    public void handleLogin(ActionEvent event) {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
-        if (username.equals("user") && password.equals("password")) {
-            // Successful login, load the user dashboard
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/user_dashboard.fxml"));
-                Scene dashboardScene = new Scene(loader.load());
+        User user = userService.loginUser(username, password);
 
-                // Set the dashboard scene
-                primaryStage.setScene(dashboardScene);
-                primaryStage.show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                messageLabel.setText("Failed to load dashboard.");
+        if (user != null) {
+            if (user instanceof Admin) {
+                AdminDashboard adminDashboard = new AdminDashboard();
+                adminDashboard.display();
+            } else if (user instanceof Customer) {
+                UserDashboard userDashboard = new UserDashboard(user);
+                userDashboard.display();
             }
         } else {
-            messageLabel.setText("Invalid credentials. Please try again.");
-        }
-    }
-
-    @FXML
-    public void handleRegister() {
-        try {
-            // Ensure the path to the FXML file is correct
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/register.fxml"));
-
-            // Load the registration screen
-            Scene registerScene = new Scene(loader.load());
-
-            // Set the new scene on the primary stage
-            primaryStage.setScene(registerScene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();  // Print the error stack trace to help diagnose issues
+            // Handle invalid login (e.g., show error message)
+            System.out.println("Invalid username or password.");
         }
     }
 }

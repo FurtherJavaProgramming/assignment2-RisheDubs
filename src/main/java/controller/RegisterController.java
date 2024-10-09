@@ -1,33 +1,46 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import model.UserManager;
+import javafx.stage.Stage;
+import service.UserService;
 
 public class RegisterController {
 
-    @FXML
-    private TextField newUsernameField;
+    private UserService userService = new UserService();
+    private Stage primaryStage;
 
     @FXML
-    private PasswordField newPasswordField;
-
+    private TextField usernameField;
     @FXML
-    private Label registerMessageLabel;
+    private PasswordField passwordField;
+    @FXML
+    private Button registerButton;
+    @FXML
+    private Label messageLabel;
 
-    private UserManager userManager = new UserManager();  // Simulating user database
+    public void setPrimaryStage(Stage stage) {
+        this.primaryStage = stage;
+    }
+
+    public void display() {
+        // Code to display registration form (FXML loading logic)
+        // Assuming you have a registration.fxml file
+    }
 
     @FXML
     public void handleRegister() {
-        String newUsername = newUsernameField.getText();
-        String newPassword = newPasswordField.getText();
+        String username = usernameField.getText();
+        String password = passwordField.getText();
 
-        if (userManager.addUser(newUsername, newPassword)) {
-            registerMessageLabel.setText("Registration successful!");
+        if (userService.registerUser(username, password)) {
+            messageLabel.setText("Registration successful!");
+            // Redirect to login screen
         } else {
-            registerMessageLabel.setText("Username already taken. Please try a different one.");
+            messageLabel.setText("Registration failed.");
         }
     }
 }

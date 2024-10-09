@@ -1,40 +1,28 @@
 package view;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import controller.UserDashboardController;
 import model.User;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
 
 public class UserDashboard {
-
     private Stage primaryStage;
     private User user;
 
-    public UserDashboard(Stage stage, User loggedInUser) {
-        this.primaryStage = stage;
-        this.user = loggedInUser;
+    public UserDashboard(Stage primaryStage, User user) {
+        this.primaryStage = primaryStage;
+        this.user = user;
     }
 
     public void display() {
-        try {
-            // Load the FXML file for the User Dashboard
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/fxml/user_dashboard.fxml"));
-            Parent root = loader.load();
+        VBox root = new VBox();
+        Label label = new Label("Welcome " + user.getUsername() + " to your Dashboard");
+        root.getChildren().add(label);
 
-            // Get the controller and pass the primaryStage and user to it
-            UserDashboardController controller = loader.getController();
-            controller.setPrimaryStage(primaryStage);
-            controller.setUser(user);
-
-            // Set the scene and show the stage
-            Scene scene = new Scene(root, 400, 300);
-            primaryStage.setTitle("User Dashboard");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Scene scene = new Scene(root, 400, 300);
+        primaryStage.setTitle("User Dashboard");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
