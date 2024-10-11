@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Rishekesh.B/Downloads/sqlite-jdbc-3.46.1.3.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rishekesh.B/Downloads/slf4j-api-1.7.36.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rishekesh.B/Downloads/openjfx-23_windows-x64_bin-sdk"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javaFX"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
