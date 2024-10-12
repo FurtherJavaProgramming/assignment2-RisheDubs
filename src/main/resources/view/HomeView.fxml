@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -23,6 +24,9 @@
     <!-- Welcome Message Section -->
     <Label fx:id="welcomeLabel" text="Welcome!" prefHeight="50.0" prefWidth="400.0" style="-fx-font-size: 20px;" />
     
-    <!-- You can add more components here -->
+    <!-- Top 5 Books List Section -->
+    <Label text="Top 5 Popular Books" style="-fx-font-size: 16px;" />
+    <ListView fx:id="booksListView" prefHeight="200.0" prefWidth="400.0" /> <!-- Ensure fx:id matches -->
+
   </children>
 </VBox>

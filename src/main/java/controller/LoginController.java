@@ -113,25 +113,21 @@ public class LoginController {
             e.printStackTrace();
         }
     }
-
-
-
     
     private void loadHomePage() {
         try {
-            // Load the HomeView.fxml file
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HomeView.fxml"));
-            VBox homeRoot = loader.load();  // You can adjust the root pane type if your home view is different
-            
-            // Get the HomeController and pass the model to it
-            HomeController homeController = loader.getController();
-            homeController.setModel(model);  // Set the current model to pass the logged-in user data
+            VBox homeRoot = loader.load();
 
-            // Create a new scene for the home page and set it on the current stage
+            // Get the controller instance and set the model
+            HomeController homeController = loader.getController();
+            homeController.setModel(model);  // Set the model for HomeController
+            homeController.setStage(stage);  // Pass the current stage
+
             Scene homeScene = new Scene(homeRoot);
-            stage.setScene(homeScene);       // Set the scene to the home page
-            stage.setTitle("Home Page");     // Set the title for the home page
-            stage.show();                    // Show the stage
+            stage.setScene(homeScene);
+            stage.setTitle("Home");
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

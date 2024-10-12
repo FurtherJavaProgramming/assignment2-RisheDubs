@@ -28,24 +28,24 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> getTop5Books() throws SQLException {
-        String sql = "SELECT * FROM " + TABLE_NAME + " ORDER BY sold_copies DESC LIMIT 5";
-        List<Book> topBooks = new ArrayList<>();
-
-        try (Connection connection = Database.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql);
+        String sql = "SELECT * FROM books ORDER BY sold_copies DESC LIMIT 5";  // Make sure the query is correct
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
+            List<Book> books = new ArrayList<>();
             while (rs.next()) {
                 Book book = new Book(
-                        rs.getString("title"),
-                        rs.getString("author"),
-                        rs.getInt("physical_copies"),
-                        rs.getDouble("price"),
-                        rs.getInt("sold_copies")
+                    rs.getString("title"),
+                    rs.getString("author"),
+                    rs.getInt("physical_copies"),
+                    rs.getDouble("price"),
+                    rs.getInt("sold_copies")
                 );
-                topBooks.add(book);
+                books.add(book);
             }
+            return books;
         }
-        return topBooks;
     }
+
 }

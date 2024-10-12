@@ -7,6 +7,7 @@ public class Book {
     private double price;
     private int soldCopies;
 
+    // Constructor matching the parameters used in BookDaoImpl
     public Book(String title, String author, int physicalCopies, double price, int soldCopies) {
         this.title = title;
         this.author = author;
