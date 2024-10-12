@@ -1,76 +1,93 @@
 package controller;
 
-import java.sql.SQLException;
-
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import java.sql.SQLException;
 import model.Model;
 import model.User;
 
 public class SignupController {
-	@FXML
-	private TextField username;
-	@FXML
-	private TextField password;
-	@FXML
-	private Button createUser;
-	@FXML
-	private Button close;
-	@FXML
-	private Label status;
-	
-	private Stage stage;
-	private Stage parentStage;
-	private Model model;
-	
-	public SignupController(Stage parentStage, Model model) {
-		this.stage = new Stage();
-		this.parentStage = parentStage;
-		this.model = model;
-	}
 
-	@FXML
-	public void initialize() {
-		createUser.setOnAction(event -> {
-			if (!username.getText().isEmpty() && !password.getText().isEmpty()) {
-				User user;
-				try {
-					user = model.getUserDao().createUser(username.getText(), password.getText());
-					if (user != null) {
-						status.setText("Created " + user.getUsername());
-						status.setTextFill(Color.GREEN);
-					} else {
-						status.setText("Cannot create user");
-						status.setTextFill(Color.RED);
-					}
-				} catch (SQLException e) {
-					status.setText(e.getMessage());
-					status.setTextFill(Color.RED);
-				}
-				
-			} else {
-				status.setText("Empty username or password");
-				status.setTextFill(Color.RED);
-			}
-		});
+    @FXML
+    private TextField username;
 
-		close.setOnAction(event -> {
-			stage.close();
-			parentStage.show();
-		});
-	}
-	
-	public void showStage(Pane root) {
-		Scene scene = new Scene(root, 500, 300);
-		stage.setScene(scene);
-		stage.setResizable(false);
-		stage.setTitle("Sign up");
-		stage.show();
-	}
+    @FXML
+    private PasswordField password;
+
+    @FXML
+    private TextField firstName;
+
+    @FXML
+    private TextField lastName;
+
+    @FXML
+    private Button createUser;
+
+    @FXML
+    private Button close;
+
+    @FXML
+    private Label status;
+
+    private Stage stage;
+    private Model model;
+
+    public SignupController() {
+        // No-argument constructor required by FXMLLoader
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    @FXML
+    public void initialize() {
+        createUser.setOnAction(event -> handleCreateUser());
+        close.setOnAction(event -> handleClose());
+    }
+
+    private void handleCreateUser() {
+        if (username.getText().isEmpty() || password.getText().isEmpty() || firstName.getText().isEmpty() || lastName.getText().isEmpty()) {
+            status.setText("All fields are required.");
+            status.setTextFill(Color.RED);
+        } else {
+            try {
+                // Attempt to create the user
+                User user = model.getUserDao().createUser(username.getText(), password.getText(), firstName.getText(), lastName.getText());
+                status.setText("User created successfully.");
+                status.setTextFill(Color.GREEN);
+
+                // Optionally, close the registration window and open login or dashboard page
+                stage.close();  // Assuming `stage` is already set correctly
+
+            } catch (SQLException e) {
+                // If the error is due to a duplicate username, show the appropriate message
+                if (e.getMessage().contains("Username already exists")) {
+                    status.setText("Username already taken. Please choose another.");
+                } else {
+                    status.setText("Database error: " + e.getMessage());
+                }
+                status.setTextFill(Color.RED);
+            }
+        }
+    }
+
+    private void handleClose() {
+        if (stage != null) {
+            stage.close();
+        }
+    }
+
+    public void showStage() {
+        stage.show();
+    }
 }

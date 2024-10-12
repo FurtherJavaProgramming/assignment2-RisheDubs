@@ -1,111 +1,144 @@
 package controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Callback;
+import java.io.IOException;
+import java.sql.SQLException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import model.Model;
 import model.User;
 
 public class LoginController {
-	@FXML
-	private TextField name;
-	@FXML
-	private PasswordField password;
-	@FXML
-	private Label message;
-	@FXML
-	private Button login;
-	@FXML
-	private Button signup;
 
-	private Model model;
-	private Stage stage;
-	
-	public LoginController(Stage stage, Model model) {
-		this.stage = stage;
-		this.model = model;
-	}
-	
-	@FXML
-	public void initialize() {		
-		login.setOnAction(event -> {
-			if (!name.getText().isEmpty() && !password.getText().isEmpty()) {
-				User user;
-				try {
-					user = model.getUserDao().getUser(name.getText(), password.getText());
-					if (user != null) {
-						model.setCurrentUser(user);
-						try {
-							FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HomeView.fxml"));
-							HomeController homeController = new HomeController(stage, model);
-							
-							loader.setController(homeController);
-							VBox root = loader.load();
-	
-							homeController.showStage(root);
-							stage.close();
-						}catch (IOException e) {
-							message.setText(e.getMessage());
-						}
-						
-					} else {
-						message.setText("Wrong username or password");
-						message.setTextFill(Color.RED);
-					}
-				} catch (SQLException e) {
-					message.setText(e.getMessage());
-					message.setTextFill(Color.RED);
-				}
-				
-			} else {
-				message.setText("Empty username or password");
-				message.setTextFill(Color.RED);
-			}
-			name.clear();
-			password.clear();
-		});
-		
-		signup.setOnAction(event -> {
-			try {
-				FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignupView.fxml"));
-				
-				// Customize controller instance
-				SignupController signupController =  new SignupController(stage, model);
+    @FXML
+    private TextField name;
 
-				loader.setController(signupController);
-				VBox root = loader.load();
-				
-				signupController.showStage(root);
-				
-				message.setText("");
-				name.clear();
-				password.clear();
-				
-				stage.close();
-			} catch (IOException e) {
-				message.setText(e.getMessage());
-			}});
-	}
-	
-	public void showStage(Pane root) {
-		Scene scene = new Scene(root, 500, 300);
-		stage.setScene(scene);
-		stage.setResizable(false);
-		stage.setTitle("Welcome");
-		stage.show();
-	}
+    @FXML
+    private PasswordField password;
+
+    @FXML
+    private Button login;
+
+    @FXML
+    private Button signup;
+
+    @FXML
+    private Label message;
+
+    private Stage stage;
+    private Model model;
+
+    public LoginController() {
+        // No-argument constructor required by FXMLLoader
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+    }
+
+    @FXML
+    public void initialize() {
+        // Add event handler for login button
+        login.setOnAction(event -> {
+            // No SQLException should be caught here directly, as handleLogin() may handle it internally
+            handleLogin();  // Call handleLogin without the try-catch here
+        });
+
+        // Add event handler for signup button (redirect to signup page)
+        signup.setOnAction(event -> openRegistration());
+    }
+
+    // Handle login validation and logic
+    private void handleLogin() {
+        if (name.getText().isEmpty() || password.getText().isEmpty()) {
+            message.setText("Username or password cannot be empty.");
+            message.setTextFill(Color.RED);
+        } else {
+            try {
+                // Fetch user by username and password
+                User user = model.getUserDao().getUser(name.getText(), password.getText());
+                
+                if (user != null) {
+                    model.setCurrentUser(user);  // Set the current user in the model
+                    loadHomePage();              // Redirect to home page
+                } else {
+                    message.setText("Invalid username or password.");
+                    message.setTextFill(Color.RED);
+                }
+            } catch (SQLException e) {
+                message.setText("Database error: " + e.getMessage());
+                message.setTextFill(Color.RED);
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    // Open registration window or handle signup logic
+    private void openRegistration() {
+        try {
+            // Load the SignupView.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignupView.fxml"));
+            BorderPane signupRoot = loader.load();  // Load as BorderPane since the new design is using BorderPane
+
+            // Get the SignupController and pass the model
+            SignupController signupController = loader.getController();
+            signupController.setModel(model);  // Pass the model to the signup controller
+
+            // Create and set the new stage in the controller
+            Stage signupStage = new Stage();
+            signupController.setStage(signupStage);  // Pass the stage to the SignupController
+
+            // Create a new scene for the registration page
+            Scene signupScene = new Scene(signupRoot);
+
+            // Set the scene and show the new stage
+            signupStage.setScene(signupScene);
+            signupStage.setTitle("Register");
+            signupStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    
+    private void loadHomePage() {
+        try {
+            // Load the HomeView.fxml file
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HomeView.fxml"));
+            VBox homeRoot = loader.load();  // You can adjust the root pane type if your home view is different
+            
+            // Get the HomeController and pass the model to it
+            HomeController homeController = loader.getController();
+            homeController.setModel(model);  // Set the current model to pass the logged-in user data
+
+            // Create a new scene for the home page and set it on the current stage
+            Scene homeScene = new Scene(homeRoot);
+            stage.setScene(homeScene);       // Set the scene to the home page
+            stage.setTitle("Home Page");     // Set the title for the home page
+            stage.show();                    // Show the stage
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void showStage() {
+        stage.show();
+    }
 }
-
