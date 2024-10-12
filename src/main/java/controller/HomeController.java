@@ -1,11 +1,17 @@
 package controller;
 
 import model.Book;
+import javafx.scene.control.MenuItem;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Model;
 import model.User;
@@ -24,10 +30,17 @@ public class HomeController {
     // No-argument constructor for FXMLLoader
     public HomeController() {
     }
+    
+    @FXML
+    private MenuItem updateProfile;
 
     @FXML
     public void initialize() {
-        // Initialization logic without accessing model (for example, setting up listeners, etc.)
+    	// Handle updateProfile action
+        updateProfile.setOnAction(event -> {
+            System.out.println("Update profile clicked");
+            openEditProfile();
+        });
     }
 
     // Set the personalized welcome message
@@ -66,4 +79,30 @@ public class HomeController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    
+    //Edit profile 
+    private void openEditProfile() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EditProfileView.fxml"));
+            BorderPane editProfileRoot = loader.load();  // Change VBox to BorderPane or your root layout type
+
+            EditProfileController editProfileController = loader.getController();
+            editProfileController.setModel(model);
+
+            Scene editProfileScene = new Scene(editProfileRoot);
+            Stage editProfileStage = new Stage();
+            editProfileController.setStage(editProfileStage);
+
+            editProfileStage.setScene(editProfileScene);
+            editProfileStage.setTitle("Edit Profile");
+            editProfileStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    
+
 }

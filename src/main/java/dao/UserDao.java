@@ -20,6 +20,10 @@ public interface UserDao {
     // Create a new user (for registration)
     User createUser(String username, String password, String firstName, String lastName) throws SQLException;
 
-    // Add this method to check if a username already exists
+    // method to check if a username already exists
     User getUserByUsername(String username) throws SQLException;
+    
+    // method to update the user's profile
+    boolean updateUserProfile(String username, String firstName, String lastName, String password) throws SQLException;
+
 }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditProfileController">
+   <left>
+      <AnchorPane prefHeight="500.0" prefWidth="498.0" BorderPane.alignment="CENTER">
+         <children>
+            <!-- Title -->
+            <Text layoutX="129.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit User Profile">
+               <font>
+                  <Font size="31.0" />
+               </font>
+            </Text>
+            
+            <!-- Username (Non-editable) -->
+            <TextField fx:id="username" editable="false" layoutX="156.0" layoutY="147.0" prefHeight="26.0" prefWidth="185.0" promptText="Username cannot be changed" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
+            
+            <!-- Firstname -->
+            <TextField fx:id="firstName" layoutX="156.0" layoutY="205.0" prefHeight="26.0" prefWidth="185.0" promptText="Change Firstname" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
+            
+            <!-- Lastname -->
+            <TextField fx:id="lastName" layoutX="156.0" layoutY="265.0" prefHeight="26.0" prefWidth="185.0" promptText="Change Lastname" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
+            
+            <!-- Password (Changed from TextField to PasswordField) -->
+            <PasswordField fx:id="password" layoutX="156.0" layoutY="325.0" prefHeight="26.0" prefWidth="185.0" promptText="Change Password" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
+            
+            <!-- Save and Cancel Buttons -->
+            <Button fx:id="saveButton" layoutX="193.0" layoutY="391.0" mnemonicParsing="false" text="Save Changes" />
+            <Button fx:id="cancelButton" layoutX="212.0" layoutY="442.0" mnemonicParsing="false" text="Cancel" />
+            
+            <!-- Labels for TextFields -->
+            <Text layoutX="73.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
+            <Text layoutX="73.0" layoutY="224.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Firstname" />
+            <Text layoutX="73.0" layoutY="284.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lastname" />
+            <Text layoutX="73.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
+         </children>
+      </AnchorPane>
+   </left>
+   
+   <!-- Right section with image -->
+   <right>
+      <AnchorPane prefHeight="500.0" prefWidth="212.0" style="-fx-background-color: #80B3FF;" BorderPane.alignment="CENTER" />
+   </right>
+</BorderPane>

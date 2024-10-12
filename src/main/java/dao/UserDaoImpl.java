@@ -100,4 +100,20 @@ public class UserDaoImpl implements UserDao {
         }
         return null;  // Return null if no user is found
     }
+    
+    @Override
+    public boolean updateUserProfile(String username, String firstName, String lastName, String password) throws SQLException {
+        String query = "UPDATE users SET first_name = ?, last_name = ?, password = ? WHERE username = ?";
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
+            stmt.setString(3, password);  // Assume passwords are stored in plain text, consider hashing for production
+            stmt.setString(4, username);
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;  // Return true if update is successful
+        }
+    }
 }
