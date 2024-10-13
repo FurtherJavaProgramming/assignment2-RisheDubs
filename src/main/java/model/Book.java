@@ -7,7 +7,11 @@ public class Book {
     private double price;
     private int soldCopies;
 
-    // Constructor matching the parameters used in BookDaoImpl
+    // No-argument constructor (add this)
+    public Book() {
+    }
+
+    // Parameterized constructor
     public Book(String title, String author, int physicalCopies, double price, int soldCopies) {
         this.title = title;
         this.author = author;
@@ -57,7 +61,6 @@ public class Book {
         this.soldCopies = soldCopies;
     }
 
-    // Optionally, you can override toString() to help with displaying in ListView
     @Override
     public String toString() {
         return title + " by " + author + " - Sold: " + soldCopies;

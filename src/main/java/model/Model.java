@@ -11,11 +11,13 @@ public class Model {
     private UserDao userDao;
     private BookDao bookDao;
     private User currentUser;
+    private ShoppingCart shoppingCart;  // Add shopping cart field
 
     public Model() {
         // Initialize the DAOs
         userDao = new UserDaoImpl();
         bookDao = new BookDaoImpl();  // Initialize the BookDao here
+        shoppingCart = new ShoppingCart();  // Initialize the shopping cart
     }
 
     // Setup method (if needed for database initialization)
@@ -29,7 +31,7 @@ public class Model {
         return userDao;
     }
 
-    // Getter for BookDao (this method is missing in your original code)
+    // Getter for BookDao
     public BookDao getBookDao() {
         return bookDao;
     }
@@ -41,5 +43,10 @@ public class Model {
 
     public void setCurrentUser(User user) {
         this.currentUser = user;
+    }
+
+    // Getter for ShoppingCart
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
     }
 }

@@ -10,4 +10,17 @@ public interface BookDao {
 
     // Method to get the top 5 books by sold copies
     List<Book> getTop5Books() throws SQLException;
+    
+    // Method signature for checking stock availability
+    boolean isStockAvailable(Book book, int quantity) throws SQLException;
+    
+    // Method to update the stock of a book
+    void updateStock(Book book, int quantity) throws SQLException;
+    
+    // Method to get a book by its title
+    Book getBookByTitle(String title) throws SQLException;
+    
+    List<Book> getAllBooks() throws SQLException;
 }
+
+
