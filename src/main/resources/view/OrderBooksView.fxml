@@ -2,18 +2,37 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderBooksController">
-    <children>
-        <Label text="Available Books" style="-fx-font-size: 20px;" />
-        <ListView fx:id="availableBooksListView" prefHeight="300.0" prefWidth="400.0" />
-        <Label text="Select Quantity" />
-        <TextField fx:id="quantityField" promptText="Enter quantity" />
-        <Button text="Add to Cart" onAction="#handleAddToCart" />
-        <Button text="Go to Cart" onAction="#goToCart" />
-        <Label fx:id="statusLabel" />
-    </children>
-</VBox>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="574.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrderBooksController">
+   <children>
+      <TableView fx:id="availableBooksTableView" layoutX="14.0" layoutY="87.0" prefHeight="299.0" prefWidth="852.0" style="-fx-background-color: #80B3FF;">
+        <columns>
+          <TableColumn fx:id="titleColumn" prefWidth="340.0" text="Title" />
+          <TableColumn fx:id="authorColumn" prefWidth="146.4" text="Author" />
+          <TableColumn fx:id="physicalCopiesColumn" prefWidth="119.2" text="Physical Copies" />
+          <TableColumn fx:id="priceColumn" prefWidth="88.8" text="Price" />
+          <TableColumn fx:id="soldCopiesColumn" prefWidth="155.2" text="Sold Copies" />
+        </columns>
+      </TableView>
+      <Button layoutX="395.0" layoutY="464.0" mnemonicParsing="false" onAction="#handleAddToCart" prefHeight="39.0" prefWidth="120.0" style="-fx-background-color: #80B3FF;" text="Add to cart" />
+      <Button layoutX="400.0" layoutY="523.0" mnemonicParsing="false" onAction="#goToCart" prefHeight="27.0" prefWidth="111.0" style="-fx-background-color: #80B3FF;" text="Go to cart" />
+      <TextField fx:id="quantityField" alignment="CENTER" layoutX="381.0" layoutY="420.0" promptText="Numbers only" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
+      <Label fx:id="statusLabel" layoutX="112.0" layoutY="520.0" />
+      <Text layoutX="101.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the quantity of books:" wrappingWidth="366.13673400878906">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="370.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Order Books">
+         <font>
+            <Font size="31.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

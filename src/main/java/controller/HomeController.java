@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Model;
@@ -128,14 +129,14 @@ public class HomeController {
         }
     }
 
-    // Method to open the order books view
+    // Method to open the order books page
     private void openOrderBooksPage() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OrderBooksView.fxml"));  // Ensure you have this view
-            VBox orderBooksRoot = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OrderBooksView.fxml"));
+            Pane orderBooksRoot = loader.load();  // Load the Pane layout as it matches the updated FXML
 
             OrderBooksController orderBooksController = loader.getController();
-            orderBooksController.setModel(model);  // Pass the model to the order books controller
+            orderBooksController.setModel(model);  // Pass the model to OrderBooksController
 
             Scene orderBooksScene = new Scene(orderBooksRoot);
             Stage orderBooksStage = new Stage();
@@ -149,4 +150,6 @@ public class HomeController {
             e.printStackTrace();
         }
     }
+
+
 }

@@ -32,8 +32,8 @@
             <PasswordField fx:id="password" layoutX="156.0" layoutY="325.0" prefHeight="26.0" prefWidth="185.0" promptText="Change Password" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
             
             <!-- Save and Cancel Buttons -->
-            <Button fx:id="saveButton" layoutX="193.0" layoutY="391.0" mnemonicParsing="false" text="Save Changes" />
-            <Button fx:id="cancelButton" layoutX="212.0" layoutY="442.0" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="saveButton" layoutX="193.0" layoutY="391.0" mnemonicParsing="false" style="-fx-background-color: #80B3FF;" text="Save Changes" />
+            <Button fx:id="cancelButton" layoutX="212.0" layoutY="442.0" mnemonicParsing="false" style="-fx-background-color: #F95454;" text="Cancel" />
             
             <!-- Labels for TextFields -->
             <Text layoutX="73.0" layoutY="165.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Username" />
