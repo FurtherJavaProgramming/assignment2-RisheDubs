@@ -16,7 +16,6 @@ public class ShoppingCartController {
 
     private ShoppingCart cart;
     private Model model;
-    private User currentUser;
     private Stage stage;
 
     @FXML
@@ -29,7 +28,7 @@ public class ShoppingCartController {
     private Label totalCostLabel;  // Label to show total cost
 
     @FXML
-    private TextField quantityField;
+    private TextField quantityField;  // Field for updating the quantity of books
 
     public ShoppingCartController() {
         this.cart = new ShoppingCart();
@@ -38,7 +37,7 @@ public class ShoppingCartController {
     // Setter for model, to be called by a parent controller
     public void setModel(Model model) {
         this.model = model;
-        this.cart = model.getShoppingCart(); // Ensure the cart from model is used
+        this.cart = model.getShoppingCart();  // Ensure the cart from model is used
         updateCartView();  // Refresh the cart view when the model is set
         updateTotalCost();  // Calculate and display the total cost
     }
@@ -67,7 +66,7 @@ public class ShoppingCartController {
             cartListView.getItems().add("Cart is empty.");
             return;
         }
-        
+
         for (Map.Entry<Book, Integer> entry : cart.getCartItems().entrySet()) {
             Book book = entry.getKey();
             int quantity = entry.getValue();
@@ -83,6 +82,74 @@ public class ShoppingCartController {
             totalCost += entry.getKey().getPrice() * entry.getValue();
         }
         totalCostLabel.setText("Total Cost: $" + String.format("%.2f", totalCost));
+    }
+
+    // Method to handle removing a book from the cart
+    @FXML
+    private void handleRemoveBook() {
+        String selectedBookInfo = cartListView.getSelectionModel().getSelectedItem();
+        if (selectedBookInfo == null) {
+            statusLabel.setText("Please select a book to remove.");
+            return;
+        }
+
+        try {
+            String selectedBookTitle = selectedBookInfo.split(" - ")[0];  // Extract book title
+            Book selectedBook = getBookByTitleInCart(selectedBookTitle);  // Get the Book object from the cart
+
+            if (selectedBook != null) {
+                cart.removeBook(selectedBook);  // Remove the book from the cart
+                updateCartView();  // Refresh the cart view
+                updateTotalCost();  // Recalculate the total cost
+                statusLabel.setText("Book removed from cart.");
+            } else {
+                statusLabel.setText("Error: Book not found in cart.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            statusLabel.setText("Error removing book from cart.");
+        }
+    }
+
+    // Method to handle updating the quantity of a book in the cart
+    @FXML
+    private void handleUpdateQuantity() {
+        String selectedBookInfo = cartListView.getSelectionModel().getSelectedItem();
+        if (selectedBookInfo == null || quantityField.getText().isEmpty()) {
+            statusLabel.setText("Please select a book and specify a new quantity.");
+            return;
+        }
+
+        try {
+            String selectedBookTitle = selectedBookInfo.split(" - ")[0];  // Extract book title
+            Book selectedBook = getBookByTitleInCart(selectedBookTitle);  // Get the Book object from the cart
+            int newQuantity = Integer.parseInt(quantityField.getText());  // Parse the new quantity
+
+            // Validate if new quantity is within stock limits
+            if (newQuantity > 0 && selectedBook != null && selectedBook.getPhysicalCopies() >= newQuantity) {
+                cart.updateQuantity(selectedBook, newQuantity);  // Update the book's quantity in the cart
+                updateCartView();  // Refresh the cart view
+                updateTotalCost();  // Recalculate the total cost
+                statusLabel.setText("Quantity updated.");
+            } else {
+                statusLabel.setText("Not enough stock available or invalid quantity.");
+            }
+        } catch (NumberFormatException e) {
+            statusLabel.setText("Invalid quantity. Please enter a valid number.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            statusLabel.setText("Error updating quantity.");
+        }
+    }
+
+    // Helper method to find a book in the cart by title
+    private Book getBookByTitleInCart(String title) {
+        for (Book book : cart.getCartItems().keySet()) {
+            if (book.getTitle().equals(title)) {
+                return book;
+            }
+        }
+        return null;
     }
 
     // Method to handle checkout

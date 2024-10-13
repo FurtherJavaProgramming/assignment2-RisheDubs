@@ -3,14 +3,23 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ShoppingCartController">
+<VBox xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ShoppingCartController" alignment="CENTER" spacing="10.0">
     <children>
-        <Label text="Shopping Cart" style="-fx-font-size: 20px;" />
+        <Label text="Your Shopping Cart" style="-fx-font-size: 20px;" />
         <ListView fx:id="cartListView" prefHeight="300.0" prefWidth="400.0" />
+
+        <Label text="Select quantity to update:" />
+        <TextField fx:id="quantityField" promptText="Enter new quantity" />
+        <Button text="Update Quantity" onAction="#handleUpdateQuantity" />
+        
+        <Button text="Remove Book" onAction="#handleRemoveBook" />
+
         <Label fx:id="totalCostLabel" text="Total Cost: $" style="-fx-font-size: 16px;" />
+        <Label fx:id="statusLabel" style="-fx-text-fill: red;" />
+
         <Button text="Checkout" onAction="#handleCheckout" />
-        <Label fx:id="statusLabel" />
     </children>
 </VBox>
