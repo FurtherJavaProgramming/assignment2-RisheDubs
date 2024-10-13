@@ -24,7 +24,7 @@
       <Button layoutX="400.0" layoutY="523.0" mnemonicParsing="false" onAction="#goToCart" prefHeight="27.0" prefWidth="111.0" style="-fx-background-color: #80B3FF;" text="Go to cart" />
       <TextField fx:id="quantityField" alignment="CENTER" layoutX="381.0" layoutY="420.0" promptText="Numbers only" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
       <Label fx:id="statusLabel" layoutX="112.0" layoutY="520.0" />
-      <Text layoutX="101.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the quantity of books:" wrappingWidth="366.13673400878906">
+      <Text layoutX="99.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter the quantity of books:" wrappingWidth="270.13673400878906">
          <font>
             <Font size="20.0" />
          </font>

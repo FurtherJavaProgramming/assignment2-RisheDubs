@@ -111,23 +111,24 @@ public class HomeController {
     private void openShoppingCart() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ShoppingCartView.fxml"));
-            VBox shoppingCartRoot = loader.load();
+            Pane cartRoot = loader.load();  // Load as Pane, not VBox
 
-            ShoppingCartController shoppingCartController = loader.getController();
-            shoppingCartController.setModel(model);  // Pass the model to the cart
+            ShoppingCartController cartController = loader.getController();
+            cartController.setModel(model);  // Pass the model to the shopping cart controller
 
-            Scene shoppingCartScene = new Scene(shoppingCartRoot);
-            Stage shoppingCartStage = new Stage();
-            shoppingCartController.setStage(shoppingCartStage);
+            Scene cartScene = new Scene(cartRoot);  // Create the scene
+            Stage cartStage = new Stage();  // Create a new stage for the shopping cart view
+            cartController.setStage(cartStage);  // Set the stage in ShoppingCartController
 
-            shoppingCartStage.setScene(shoppingCartScene);
-            shoppingCartStage.setTitle("Shopping Cart");
-            shoppingCartStage.show();
+            cartStage.setScene(cartScene);  // Set the scene on the stage
+            cartStage.setTitle("Shopping Cart");
+            cartStage.show();  // Show the cart window
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     // Method to open the order books page
     private void openOrderBooksPage() {

@@ -2,13 +2,15 @@ package controller;
 
 import model.Book;
 import model.ShoppingCart;
-import model.User;
 import model.Model;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -19,13 +21,22 @@ public class ShoppingCartController {
     private Stage stage;
 
     @FXML
-    private ListView<String> cartListView;
+    private TableView<Book> cartTableView;  // TableView to display the cart items
 
     @FXML
-    private Label statusLabel;
+    private TableColumn<Book, String> titleColumn;  // Column for book titles
 
     @FXML
-    private Label totalCostLabel;  // Label to show total cost
+    private TableColumn<Book, String> quantityColumn;  // Column for quantity
+
+    @FXML
+    private TableColumn<Book, String> costColumn;  // Column for cost per book
+
+    @FXML
+    private Label statusLabel;  // Label to show status messages (error, success)
+
+    @FXML
+    private Label totalCostLabel;  // Label to show the total cost of the cart
 
     @FXML
     private TextField quantityField;  // Field for updating the quantity of books
@@ -38,6 +49,7 @@ public class ShoppingCartController {
     public void setModel(Model model) {
         this.model = model;
         this.cart = model.getShoppingCart();  // Ensure the cart from model is used
+        initializeTableColumns();  // Initialize table columns
         updateCartView();  // Refresh the cart view when the model is set
         updateTotalCost();  // Calculate and display the total cost
     }
@@ -47,31 +59,36 @@ public class ShoppingCartController {
         this.stage = stage;
     }
 
-    // Method to add a book to the cart
-    public void addToCart(Book book, int quantity) {
-        if (book.getPhysicalCopies() >= quantity) {
-            cart.addBook(book, quantity);
-            updateCartView();  // Refresh the cart view after adding the book
-            updateTotalCost();  // Update the total cost
-            statusLabel.setText("Book added to cart.");
-        } else {
-            statusLabel.setText("Not enough stock available.");
-        }
+    // Method to initialize table columns for the cart view
+    private void initializeTableColumns() {
+        titleColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getTitle()));
+
+        // Custom CellValueFactory for quantity
+        quantityColumn.setCellValueFactory(data -> {
+            Book book = data.getValue();
+            Integer quantity = cart.getCartItems().get(book);  // Get quantity from the cart
+            return new SimpleStringProperty(String.valueOf(quantity));
+        });
+
+        // Custom CellValueFactory for cost
+        costColumn.setCellValueFactory(data -> {
+            Book book = data.getValue();
+            Integer quantity = cart.getCartItems().get(book);
+            Double cost = book.getPrice() * quantity;  // Calculate total cost for this book
+            return new SimpleStringProperty(String.format("$%.2f", cost));
+        });
     }
 
-    // Method to update the cart view (ListView) with the current cart contents
+    // Method to update the cart view (TableView) with the current cart contents
     private void updateCartView() {
-        cartListView.getItems().clear();
+        cartTableView.getItems().clear();  // Clear the existing items
         if (cart.getCartItems().isEmpty()) {
-            cartListView.getItems().add("Cart is empty.");
+            statusLabel.setText("Cart is empty.");
             return;
         }
 
-        for (Map.Entry<Book, Integer> entry : cart.getCartItems().entrySet()) {
-            Book book = entry.getKey();
-            int quantity = entry.getValue();
-            double cost = book.getPrice() * quantity;  // Calculate cost for each book
-            cartListView.getItems().add(book.getTitle() + " - Quantity: " + quantity + " - Cost: $" + String.format("%.2f", cost));
+        for (Book book : cart.getCartItems().keySet()) {
+            cartTableView.getItems().add(book);  // Add book to the table
         }
     }
 
@@ -87,24 +104,17 @@ public class ShoppingCartController {
     // Method to handle removing a book from the cart
     @FXML
     private void handleRemoveBook() {
-        String selectedBookInfo = cartListView.getSelectionModel().getSelectedItem();
-        if (selectedBookInfo == null) {
+        Book selectedBook = cartTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook == null) {
             statusLabel.setText("Please select a book to remove.");
             return;
         }
 
         try {
-            String selectedBookTitle = selectedBookInfo.split(" - ")[0];  // Extract book title
-            Book selectedBook = getBookByTitleInCart(selectedBookTitle);  // Get the Book object from the cart
-
-            if (selectedBook != null) {
-                cart.removeBook(selectedBook);  // Remove the book from the cart
-                updateCartView();  // Refresh the cart view
-                updateTotalCost();  // Recalculate the total cost
-                statusLabel.setText("Book removed from cart.");
-            } else {
-                statusLabel.setText("Error: Book not found in cart.");
-            }
+            cart.removeBook(selectedBook);  // Remove the book from the cart
+            updateCartView();  // Refresh the cart view
+            updateTotalCost();  // Recalculate the total cost
+            statusLabel.setText("Book removed from cart.");
         } catch (Exception e) {
             e.printStackTrace();
             statusLabel.setText("Error removing book from cart.");
@@ -114,19 +124,17 @@ public class ShoppingCartController {
     // Method to handle updating the quantity of a book in the cart
     @FXML
     private void handleUpdateQuantity() {
-        String selectedBookInfo = cartListView.getSelectionModel().getSelectedItem();
-        if (selectedBookInfo == null || quantityField.getText().isEmpty()) {
+        Book selectedBook = cartTableView.getSelectionModel().getSelectedItem();
+        if (selectedBook == null || quantityField.getText().isEmpty()) {
             statusLabel.setText("Please select a book and specify a new quantity.");
             return;
         }
 
         try {
-            String selectedBookTitle = selectedBookInfo.split(" - ")[0];  // Extract book title
-            Book selectedBook = getBookByTitleInCart(selectedBookTitle);  // Get the Book object from the cart
             int newQuantity = Integer.parseInt(quantityField.getText());  // Parse the new quantity
 
             // Validate if new quantity is within stock limits
-            if (newQuantity > 0 && selectedBook != null && selectedBook.getPhysicalCopies() >= newQuantity) {
+            if (newQuantity > 0 && selectedBook.getPhysicalCopies() >= newQuantity) {
                 cart.updateQuantity(selectedBook, newQuantity);  // Update the book's quantity in the cart
                 updateCartView();  // Refresh the cart view
                 updateTotalCost();  // Recalculate the total cost
@@ -140,16 +148,6 @@ public class ShoppingCartController {
             e.printStackTrace();
             statusLabel.setText("Error updating quantity.");
         }
-    }
-
-    // Helper method to find a book in the cart by title
-    private Book getBookByTitleInCart(String title) {
-        for (Book book : cart.getCartItems().keySet()) {
-            if (book.getTitle().equals(title)) {
-                return book;
-            }
-        }
-        return null;
     }
 
     // Method to handle checkout
