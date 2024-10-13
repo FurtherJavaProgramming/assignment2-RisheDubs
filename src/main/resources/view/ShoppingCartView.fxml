@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ShoppingCartController">
+    <children>
+        <Label text="Shopping Cart" style="-fx-font-size: 20px;" />
+        <ListView fx:id="cartListView" prefHeight="300.0" prefWidth="400.0" />
+        <Label fx:id="totalCostLabel" text="Total Cost: $" style="-fx-font-size: 16px;" />
+        <Button text="Checkout" onAction="#handleCheckout" />
+        <Label fx:id="statusLabel" />
+    </children>
+</VBox>
