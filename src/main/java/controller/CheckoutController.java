@@ -3,8 +3,10 @@ package controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.ShoppingCart;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -13,39 +15,41 @@ import java.util.Random;
 public class CheckoutController {
 
     private ShoppingCart cart;
+    private Stage stage;  // Add a field to store the stage
 
     @FXML
-    private Label totalPriceLabel;
+    private Text totalPriceLabel;  // Changed to Text for the new FXML design
 
     @FXML
-    private TextField cardNumberField;
+    private TextField cardNumberField;  // For the card number input
 
     @FXML
-    private TextField expiryDateField;
+    private TextField expiryDateField;  // For the expiry date input
 
     @FXML
-    private TextField cvvField;
+    private TextField cvvField;  // For the CVV input
 
     @FXML
-    private Label statusLabel;
+    private Label statusLabel;  // Label to show status messages (error/success)
 
-	private Stage stage;
-
+    // Set the shopping cart for this controller and update the total price
     public void setCart(ShoppingCart cart) {
         this.cart = cart;
-        updateTotalPrice();  // Display the total price
+        updateTotalPrice();  // Display the total price on the page
     }
     
+    // Method to set the stage
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
-
+    // Method to update the total price on the view
     private void updateTotalPrice() {
         double totalCost = cart.getTotalCost();
-        totalPriceLabel.setText("Total Price: $" + String.format("%.2f", totalCost));
+        totalPriceLabel.setText("Total Price: $" + String.format("%.2f", totalCost));  // Update the price using Text
     }
 
+    // Method to handle the payment confirmation
     @FXML
     private void handleConfirmPayment() {
         String cardNumber = cardNumberField.getText();
@@ -60,14 +64,16 @@ public class CheckoutController {
         } else if (!validateCVV(cvv)) {
             statusLabel.setText("Invalid CVV. It must be 3 digits.");
         } else {
-            processPayment();
+            processPayment();  // Process the payment if all validations pass
         }
     }
 
+    // Method to validate card number (must be 16 digits)
     private boolean validateCardNumber(String cardNumber) {
         return cardNumber.matches("\\d{16}");
     }
 
+    // Method to validate the expiry date (must be a future date)
     private boolean validateExpiryDate(String expiryDate) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yy");
@@ -78,10 +84,12 @@ public class CheckoutController {
         }
     }
 
+    // Method to validate the CVV (must be 3 digits)
     private boolean validateCVV(String cvv) {
         return cvv.matches("\\d{3}");
     }
 
+    // Method to process the payment and generate a random order number
     private void processPayment() {
         String orderNumber = generateOrderNumber();
         statusLabel.setStyle("-fx-text-fill: green;");
@@ -90,6 +98,7 @@ public class CheckoutController {
         cart.clearCart();  // Clear the cart after successful payment
     }
 
+    // Method to generate a random order number
     private String generateOrderNumber() {
         Random random = new Random();
         return "ORD" + (random.nextInt(900000) + 100000);  // Generates a random 6-digit order number

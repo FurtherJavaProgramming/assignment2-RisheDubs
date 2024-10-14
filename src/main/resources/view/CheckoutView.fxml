@@ -1,22 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Label?> <!-- Added import for Label -->
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CheckoutController" alignment="CENTER" spacing="10.0">
-    <children>
-        <Label text="Checkout" style="-fx-font-size: 20px;" />
-        <Label fx:id="totalPriceLabel" text="Total Price: $" />
 
-        <Label text="Enter Credit Card Information" style="-fx-font-size: 16px;" />
-        <TextField fx:id="cardNumberField" promptText="Card Number (16 digits)" />
-        <TextField fx:id="expiryDateField" promptText="Expiry Date (MM/YY)" />
-        <TextField fx:id="cvvField" promptText="CVV (3 digits)" />
-
-        <Button text="Confirm Payment" onAction="#handleConfirmPayment" />
-
-        <Label fx:id="statusLabel" style="-fx-text-fill: red;" />
-    </children>
-</VBox>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CheckoutController">
+   <left>
+      <AnchorPane prefHeight="400.0" prefWidth="157.0" style="-fx-background-color: #FD8B51;" BorderPane.alignment="CENTER" />
+   </left>
+   <center>
+      <AnchorPane prefHeight="400.0" prefWidth="469.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="144.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHECKOUT">
+               <font>
+                  <Font size="31.0" />
+               </font>
+            </Text>
+            <Text fx:id="totalPriceLabel" layoutX="82.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Price: ">
+               <font>
+                  <Font size="19.0" />
+               </font>
+            </Text>
+            <Text layoutX="82.0" layoutY="129.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Credit Card Information">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text layoutX="21.0" layoutY="194.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Card Number">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text layoutX="21.0" layoutY="235.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Date">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text layoutX="23.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CVV">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Button layoutX="186.0" layoutY="331.0" mnemonicParsing="false" style="-fx-background-color: #FD8B51;" text="Confirm Payment" onAction="#handleConfirmPayment"/>
+            <TextField fx:id="cardNumberField" layoutX="138.0" layoutY="175.0" prefHeight="26.0" prefWidth="282.0" promptText="Card Number (16 Digits)" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #CB6040;" />
+            <TextField fx:id="expiryDateField" layoutX="139.0" layoutY="216.0" prefHeight="26.0" prefWidth="140.0" promptText="Expiry Date [MM/YY]" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #CB6040;" />
+            <TextField fx:id="cvvField" layoutX="140.0" layoutY="254.0" prefHeight="26.0" prefWidth="114.0" promptText="CVV (3 Digits)" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: CB6040;" />
+            <Label fx:id="statusLabel" layoutX="50.0" layoutY="370.0" text="" style="-fx-text-fill: red;"/> <!-- Added statusLabel here -->
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

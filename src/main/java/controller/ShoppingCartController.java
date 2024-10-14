@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -157,37 +158,36 @@ public class ShoppingCartController {
     // Method to handle checkout
     @FXML
     private void handleCheckout() {
-        if (cart.getCartItems().isEmpty()) {
-            statusLabel.setText("Cart is empty. Add some books first.");
+    	
+    	if (cart.getCartItems().isEmpty()) {
+            statusLabel.setText("Your cart is empty. Please add some books before checking out.");
             return;
         }
-
-        // Show the checkout view
+    	
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CheckoutView.fxml"));
-            VBox checkoutRoot = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CheckOutView.fxml"));
+            BorderPane checkoutRoot = loader.load();  // Updated to use BorderPane
 
-            // Get the CheckoutController and pass the ShoppingCart
             CheckoutController checkoutController = loader.getController();
-            checkoutController.setCart(cart);
-
-            // Create a new stage for the payment window
-            Stage checkoutStage = new Stage();
-            checkoutController.setStage(checkoutStage);
+            checkoutController.setCart(cart);  // Pass the shopping cart to the checkout controller
+            
+            // Optional: If you need to pass the stage, make sure to use setStage
+            checkoutController.setStage(stage);  // Pass the stage to the checkout controller if needed
 
             Scene checkoutScene = new Scene(checkoutRoot);
+            Stage checkoutStage = new Stage();  // Create a new stage for the checkout view
             checkoutStage.setScene(checkoutScene);
             checkoutStage.setTitle("Checkout");
             checkoutStage.show();
 
-            // Close the current cart window
+            // Close the current cart window after checkout opens
             stage.close();
+
         } catch (IOException e) {
             e.printStackTrace();
-            statusLabel.setText("Error during checkout.");
+            statusLabel.setText("Error loading checkout page.");
         }
     }
-
     
     @FXML
     private void handleProceedToCheckout() {
