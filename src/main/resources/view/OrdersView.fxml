@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrdersController">
+   <children>
+      <TableView fx:id="ordersTable" layoutX="20.0" layoutY="20.0" prefHeight="200.0" prefWidth="500.0">
+         <columns>
+            <TableColumn fx:id="orderNumberColumn" prefWidth="150.0" text="Order Number" />
+            <TableColumn fx:id="dateTimeColumn" prefWidth="200.0" text="Date &amp; Time" />  <!-- Properly escaped & character -->
+            <TableColumn fx:id="totalPriceColumn" prefWidth="150.0" text="Total Price" />
+         </columns>
+      </TableView>
+
+      <TableView fx:id="booksTable" layoutX="20.0" layoutY="240.0" prefHeight="200.0" prefWidth="500.0">
+         <columns>
+            <TableColumn fx:id="bookTitleColumn" prefWidth="300.0" text="Book Title" />
+            <TableColumn fx:id="bookQuantityColumn" prefWidth="200.0" text="Quantity" />
+         </columns>
+      </TableView>
+   </children>
+</Pane>

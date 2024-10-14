@@ -6,6 +6,7 @@ import dao.BookDao;
 import dao.BookDaoImpl;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class Model {
     private UserDao userDao;
@@ -14,6 +15,7 @@ public class Model {
     private ShoppingCart shoppingCart;  // Add shopping cart field
 
     public Model() {
+    	
         // Initialize the DAOs
         userDao = new UserDaoImpl();
         bookDao = new BookDaoImpl();  // Initialize the BookDao here
@@ -49,4 +51,15 @@ public class Model {
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
     }
+    
+    private List<Order> orders;  // Assuming you store orders in a List
+
+    public List<Order> getOrders() {
+        return orders;  // Return the list of orders
+    }
+    
+    public void addOrder(Order order) {
+        orders.add(order);  // Add a new order to the list
+    }
+
 }

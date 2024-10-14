@@ -29,6 +29,7 @@
 
     <!-- Buttons Section -->
     <Button fx:id="shoppingCartButton" text="Go to Shopping Cart" prefWidth="200.0" />
-    <Button fx:id="orderBooksButton" text="Order Books" prefWidth="200.0" />  <!-- New button for ordering books -->
+    <Button fx:id="orderBooksButton" text="Order Books" prefWidth="200.0" />
+    <Button fx:id="viewOrdersButton" text="View Orders" prefWidth="200.0" onAction="#openOrdersPage"/> <!-- New button for viewing orders -->
   </children>
 </VBox>

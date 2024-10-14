@@ -4,16 +4,18 @@ import model.Book;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Button;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Model;
 import model.User;
@@ -24,31 +26,36 @@ public class HomeController {
     private Stage stage;
 
     @FXML
-    private Label welcomeLabel;  // To display the personalized message
+    private Label welcomeLabel;
 
     @FXML
-    private ListView<String> booksListView;  // ListView to display top 5 books
+    private ListView<String> booksListView;
 
     @FXML
     private MenuItem updateProfile;
     
     @FXML
     private Button shoppingCartButton;
+    
+    @FXML
+    private AnchorPane rootPane;
+    
+    @FXML
+    private Button viewOrdersButton;
 
     @FXML
-    private Button orderBooksButton;  // New button for ordering books
+    private Button orderBooksButton;
 
-    // No-argument constructor for FXMLLoader
     public HomeController() {}
 
     @FXML
     public void initialize() {
         updateProfile.setOnAction(event -> openEditProfile());
         shoppingCartButton.setOnAction(event -> openShoppingCart());
-        orderBooksButton.setOnAction(event -> openOrderBooksPage());  // Handle the new button's action
+        orderBooksButton.setOnAction(event -> openOrderBooksPage());
+        viewOrdersButton.setOnAction(event -> openOrdersPage());  // Added action for view orders button
     }
 
-    // Set the personalized welcome message
     public void showWelcomeMessage() {
         if (model != null) {
             User currentUser = model.getCurrentUser();
@@ -58,7 +65,6 @@ public class HomeController {
         }
     }
 
-    // Load top 5 books based on sold copies
     private void loadTop5Books() throws SQLException {
         if (model != null) {
             List<Book> topBooks = model.getBookDao().getTop5Books();
@@ -69,13 +75,12 @@ public class HomeController {
         }
     }
 
-    // Setter for model
     public void setModel(Model model) {
         this.model = model;
-        showWelcomeMessage();  // Refresh welcome message after model is set
+        showWelcomeMessage();
 
         try {
-            loadTop5Books();  // Load top books once the model is set
+            loadTop5Books();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -84,12 +89,11 @@ public class HomeController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
-    // Edit profile 
+
     private void openEditProfile() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/EditProfileView.fxml"));
-            BorderPane editProfileRoot = loader.load();  // Change VBox to BorderPane or your root layout type
+            Pane editProfileRoot = loader.load();
 
             EditProfileController editProfileController = loader.getController();
             editProfileController.setModel(model);
@@ -107,37 +111,34 @@ public class HomeController {
         }
     }
 
-    // Method to open the shopping cart view
     private void openShoppingCart() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ShoppingCartView.fxml"));
-            Pane cartRoot = loader.load();  // Load as Pane, not VBox
+            Pane cartRoot = loader.load();
 
             ShoppingCartController cartController = loader.getController();
-            cartController.setModel(model);  // Pass the model to the shopping cart controller
+            cartController.setModel(model);
 
-            Scene cartScene = new Scene(cartRoot);  // Create the scene
-            Stage cartStage = new Stage();  // Create a new stage for the shopping cart view
-            cartController.setStage(cartStage);  // Set the stage in ShoppingCartController
+            Scene cartScene = new Scene(cartRoot);
+            Stage cartStage = new Stage();
+            cartController.setStage(cartStage);
 
-            cartStage.setScene(cartScene);  // Set the scene on the stage
+            cartStage.setScene(cartScene);
             cartStage.setTitle("Shopping Cart");
-            cartStage.show();  // Show the cart window
+            cartStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-
-    // Method to open the order books page
     private void openOrderBooksPage() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OrderBooksView.fxml"));
-            Pane orderBooksRoot = loader.load();  // Load the Pane layout as it matches the updated FXML
+            Pane orderBooksRoot = loader.load();
 
             OrderBooksController orderBooksController = loader.getController();
-            orderBooksController.setModel(model);  // Pass the model to OrderBooksController
+            orderBooksController.setModel(model);
 
             Scene orderBooksScene = new Scene(orderBooksRoot);
             Stage orderBooksStage = new Stage();
@@ -152,5 +153,20 @@ public class HomeController {
         }
     }
 
+    @FXML
+    private void openOrdersPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OrdersView.fxml"));
+            Pane ordersPane = loader.load();
 
+            rootPane.getChildren().clear();
+            rootPane.getChildren().add(ordersPane);
+
+            OrdersController ordersController = loader.getController();
+            ordersController.setModel(model);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
