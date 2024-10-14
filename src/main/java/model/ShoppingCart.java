@@ -31,4 +31,13 @@ public class ShoppingCart {
     public void clearCart() {
         cartItems.clear();
     }
+    
+    // Method to calculate the total cost of items in the cart
+    public double getTotalCost() {
+        double totalCost = 0.0;
+        for (Map.Entry<Book, Integer> entry : cartItems.entrySet()) {
+            totalCost += entry.getKey().getPrice() * entry.getValue();  // Calculate total cost
+        }
+        return totalCost;
+    }
 }

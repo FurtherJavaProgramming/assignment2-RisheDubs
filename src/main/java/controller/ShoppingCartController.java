@@ -5,12 +5,16 @@ import model.ShoppingCart;
 import model.Model;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -151,31 +155,60 @@ public class ShoppingCartController {
     }
 
     // Method to handle checkout
-    public void handleCheckout() {
+    @FXML
+    private void handleCheckout() {
         if (cart.getCartItems().isEmpty()) {
             statusLabel.setText("Cart is empty. Add some books first.");
             return;
         }
 
-        for (Map.Entry<Book, Integer> entry : cart.getCartItems().entrySet()) {
-            try {
-                // Check if the stock is available for each book in the cart
-                if (model.getBookDao().isStockAvailable(entry.getKey(), entry.getValue())) {
-                    model.getBookDao().updateStock(entry.getKey(), entry.getValue());
-                } else {
-                    statusLabel.setText("Some books are no longer available.");
-                    return;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                statusLabel.setText("Error during checkout.");
-                return;
-            }
+        // Show the checkout view
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CheckoutView.fxml"));
+            VBox checkoutRoot = loader.load();
+
+            // Get the CheckoutController and pass the ShoppingCart
+            CheckoutController checkoutController = loader.getController();
+            checkoutController.setCart(cart);
+
+            // Create a new stage for the payment window
+            Stage checkoutStage = new Stage();
+            checkoutController.setStage(checkoutStage);
+
+            Scene checkoutScene = new Scene(checkoutRoot);
+            checkoutStage.setScene(checkoutScene);
+            checkoutStage.setTitle("Checkout");
+            checkoutStage.show();
+
+            // Close the current cart window
+            stage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            statusLabel.setText("Error during checkout.");
         }
-        // Clear the cart after a successful checkout
-        cart.clearCart();
-        updateCartView();
-        updateTotalCost();  // Reset total cost after checkout
-        statusLabel.setText("Checkout successful.");
     }
+
+    
+    @FXML
+    private void handleProceedToCheckout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CheckoutView.fxml"));
+            VBox checkoutRoot = loader.load();
+
+            CheckoutController checkoutController = loader.getController();
+            checkoutController.setCart(cart);  // Pass the cart to the checkout
+
+            Scene checkoutScene = new Scene(checkoutRoot);
+            Stage checkoutStage = new Stage();
+            checkoutStage.setScene(checkoutScene);
+            checkoutStage.setTitle("Checkout");
+            checkoutStage.show();
+
+            // Close the current shopping cart stage
+            stage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
