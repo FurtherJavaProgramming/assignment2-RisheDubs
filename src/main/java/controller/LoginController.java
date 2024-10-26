@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import model.Model;
@@ -115,15 +116,19 @@ public class LoginController {
     }
     
     private void loadHomePage() {
-        try {
+    	try {
+            // Load the HomeView.fxml, make sure the path is correct
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HomeView.fxml"));
-            VBox homeRoot = loader.load();
 
-            // Get the controller instance and set the model
+            // Since the root is an AnchorPane, cast it correctly
+            AnchorPane homeRoot = loader.load();  
+
+            // Get the HomeController and set the model and stage
             HomeController homeController = loader.getController();
-            homeController.setModel(model);  // Set the model for HomeController
-            homeController.setStage(stage);  // Pass the current stage
+            homeController.setModel(model);
+            homeController.setStage(stage);
 
+            // Create a new scene with the correct root node
             Scene homeScene = new Scene(homeRoot);
             stage.setScene(homeScene);
             stage.setTitle("Home");

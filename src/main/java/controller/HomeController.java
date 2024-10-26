@@ -8,7 +8,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Model;
 import model.User;
@@ -53,7 +53,14 @@ public class HomeController {
         updateProfile.setOnAction(event -> openEditProfile());
         shoppingCartButton.setOnAction(event -> openShoppingCart());
         orderBooksButton.setOnAction(event -> openOrderBooksPage());
-        viewOrdersButton.setOnAction(event -> openOrdersPage());  // Added action for view orders button
+        viewOrdersButton.setOnAction(event -> {
+			try {
+				openOrdersPage();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});  // Added action for view orders button
     }
 
     public void showWelcomeMessage() {
@@ -154,19 +161,24 @@ public class HomeController {
     }
 
     @FXML
-    private void openOrdersPage() {
-        try {
+    private void openOrdersPage() throws SQLException {
+    	try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/OrdersView.fxml"));
-            Pane ordersPane = loader.load();
-
-            rootPane.getChildren().clear();
-            rootPane.getChildren().add(ordersPane);
+            VBox ordersRoot = loader.load();
 
             OrdersController ordersController = loader.getController();
-            ordersController.setModel(model);
+            ordersController.setModel(model);  // Reload the model to fetch new data
 
-        } catch (IOException e) {
+            Stage ordersStage = new Stage();
+            ordersController.setStage(ordersStage);
+
+            Scene scene = new Scene(ordersRoot);
+            ordersStage.setScene(scene);
+            ordersStage.setTitle("View Orders");
+            ordersStage.show();
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
+    
 }
