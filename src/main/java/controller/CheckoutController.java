@@ -5,16 +5,24 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Order;
 import model.ShoppingCart;
 
+import model.Book;
+import model.Model;
+
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Map;
 import java.util.Random;
 
 public class CheckoutController {
 
     private ShoppingCart cart;
+    private Model model;
     private Stage stage;  // Add a field to store the stage
 
     @FXML
@@ -38,6 +46,12 @@ public class CheckoutController {
         updateTotalPrice();  // Display the total price on the page
     }
     
+    // Setter for Model
+    public void setModel(Model model) {
+        this.model = model;  // Store the model instance
+    }
+
+    
     // Method to set the stage
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -56,7 +70,6 @@ public class CheckoutController {
         String expiryDate = expiryDateField.getText();
         String cvv = cvvField.getText();
 
-        // Validate the credit card information
         if (!validateCardNumber(cardNumber)) {
             statusLabel.setText("Invalid card number. It must be 16 digits.");
         } else if (!validateExpiryDate(expiryDate)) {
@@ -91,11 +104,22 @@ public class CheckoutController {
 
     // Method to process the payment and generate a random order number
     private void processPayment() {
-        String orderNumber = generateOrderNumber();
-        statusLabel.setStyle("-fx-text-fill: green;");
-        statusLabel.setText("Payment successful! Order number: " + orderNumber);
+        Order newOrder = new Order(LocalDateTime.now(), cart.getTotalCost());
 
-        cart.clearCart();  // Clear the cart after successful payment
+        // Add books from the cart to the new order
+        cart.getCartItems().forEach(newOrder::addBook);
+
+        try {
+            model.getOrderDao().insertOrder(newOrder);  // Store order in the database
+            statusLabel.setStyle("-fx-text-fill: green;");
+            statusLabel.setText("Payment successful! Order placed.");
+
+            cart.clearCart();  // Clear the cart after successful payment
+        } catch (SQLException e) {
+            e.printStackTrace();
+            statusLabel.setStyle("-fx-text-fill: red;");
+            statusLabel.setText("Payment failed. Try again.");
+        }
     }
 
     // Method to generate a random order number

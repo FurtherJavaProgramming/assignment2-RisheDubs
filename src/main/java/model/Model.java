@@ -1,14 +1,17 @@
 package model;
 
 import dao.UserDao;
+import dao.OrderDao;
 import dao.UserDaoImpl;
 import dao.BookDao;
 import dao.BookDaoImpl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Model {
+	private OrderDao orderDao;
     private UserDao userDao;
     private BookDao bookDao;
     private User currentUser;
@@ -17,9 +20,11 @@ public class Model {
     public Model() {
     	
         // Initialize the DAOs
+    	orderDao = new OrderDao(); 
         userDao = new UserDaoImpl();
         bookDao = new BookDaoImpl();  // Initialize the BookDao here
         shoppingCart = new ShoppingCart();  // Initialize the shopping cart
+        orders = new ArrayList<>();
     }
 
     // Setup method (if needed for database initialization)
@@ -31,6 +36,10 @@ public class Model {
     // Getter for UserDao
     public UserDao getUserDao() {
         return userDao;
+    }
+    
+    public OrderDao getOrderDao() {
+        return orderDao;
     }
 
     // Getter for BookDao
@@ -54,8 +63,8 @@ public class Model {
     
     private List<Order> orders;  // Assuming you store orders in a List
 
-    public List<Order> getOrders() {
-        return orders;  // Return the list of orders
+    public List<Order> getOrders() throws SQLException {
+        return orderDao.getAllOrders();
     }
     
     public void addOrder(Order order) {
