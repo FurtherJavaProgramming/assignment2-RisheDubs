@@ -24,6 +24,7 @@ public class CheckoutController {
     private ShoppingCart cart;
     private Model model;
     private Stage stage;  // Add a field to store the stage
+    private double totalPrice;
 
     @FXML
     private Text totalPriceLabel;  // Changed to Text for the new FXML design
@@ -104,10 +105,9 @@ public class CheckoutController {
 
     // Method to process the payment and generate a random order number
     private void processPayment() {
-        Order newOrder = new Order(LocalDateTime.now(), cart.getTotalCost());
+        Order newOrder = new Order(model.getCurrentUser().getUsername(), LocalDateTime.now(), cart.getTotalCost());
 
-        // Add books from the cart to the new order
-        cart.getCartItems().forEach(newOrder::addBook);
+        cart.getCartItems().forEach(newOrder::addBook);  // Add books to the order
 
         try {
             model.getOrderDao().insertOrder(newOrder);  // Store order in the database
@@ -121,6 +121,8 @@ public class CheckoutController {
             statusLabel.setText("Payment failed. Try again.");
         }
     }
+
+
 
     // Method to generate a random order number
     private String generateOrderNumber() {

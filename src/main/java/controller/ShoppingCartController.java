@@ -147,7 +147,7 @@ public class ShoppingCartController {
         }
 
         double totalPrice = cart.getTotalCost();  // Use the getTotalCost method
-        Order newOrder = new Order(LocalDateTime.now(), totalPrice);  // Create a new order with the correct constructor
+        Order newOrder = new Order(null, LocalDateTime.now(), totalPrice);  // Create a new order with the correct constructor
 
         // Add books and their quantities to the new order
         for (Map.Entry<Book, Integer> entry : cart.getCartItems().entrySet()) {
@@ -183,14 +183,13 @@ public class ShoppingCartController {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/CheckoutView.fxml"));
-            BorderPane checkoutRoot = loader.load();  // Load the checkout view
+            BorderPane checkoutRoot = loader.load();
 
             CheckoutController checkoutController = loader.getController();
-            checkoutController.setCart(cart);  // Pass the cart to the checkout controller
-            
-            checkoutController.setModel(this.model);
+            checkoutController.setCart(cart);
+            checkoutController.setModel(this.model);  // Pass the model to access the user ID
             checkoutController.setStage(stage);
-            
+
             Scene checkoutScene = new Scene(checkoutRoot);
             Stage checkoutStage = new Stage();
             checkoutStage.setScene(checkoutScene);

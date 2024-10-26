@@ -49,7 +49,7 @@ public class Model {
 
     // Getter and setter for the currently logged-in user
     public User getCurrentUser() {
-        return this.currentUser;
+        return currentUser;
     }
 
     public void setCurrentUser(User user) {
@@ -64,7 +64,11 @@ public class Model {
     private List<Order> orders;  // Assuming you store orders in a List
 
     public List<Order> getOrders() throws SQLException {
-        return orderDao.getAllOrders();
+        if (currentUser != null) {
+            return orderDao.getUserOrders(currentUser.getUsername());
+        } else {
+            throw new IllegalStateException("No user is currently logged in.");
+        }
     }
     
     public void addOrder(Order order) {

@@ -5,7 +5,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OrdersController" spacing="10" prefWidth="600.0" prefHeight="600.0">
+<VBox xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="controller.OrdersController" spacing="10" prefWidth="600.0" prefHeight="600.0">
     <children>
         <TableView fx:id="ordersTable" prefHeight="300.0" prefWidth="580.0">
             <columns>

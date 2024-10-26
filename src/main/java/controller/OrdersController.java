@@ -13,11 +13,13 @@ import javafx.stage.Stage;
 import model.Book;
 import model.Model;
 import model.Order;
+import model.OrderBookEntry;
 
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class OrdersController {
 
@@ -38,9 +40,9 @@ public class OrdersController {
 
     @FXML
     private TableColumn<Order, Double> totalPriceColumn;
-
+    
     @FXML
-    private TableView<Book> booksTable;
+    private TableView<OrderBookEntry> booksTable;
 
     @FXML
     private TableColumn<Book, String> bookTitleColumn;
@@ -59,7 +61,38 @@ public class OrdersController {
 
     @FXML
     private void loadOrders() throws SQLException {
-        List<Order> orders = model.getOrders();  // Fetch orders from the database
+        // Ensure the current user is not null
+        if (model.getCurrentUser() != null) {
+            String username = model.getCurrentUser().getUsername();  // Fetch the current user's username
+            
+            List<Order> orders = model.getOrderDao().getUserOrders(username);  // Fetch orders for the current user
+
+            if (orders != null && !orders.isEmpty()) {
+                // Set cell factories for order details, book titles, and quantities
+                orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
+                dateTimeColumn.setCellValueFactory(cellData -> 
+                    new SimpleStringProperty(cellData.getValue().getDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))));
+                totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+                bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
+                bookQuantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+                // Populate the table with the list of orders for the current user
+                ordersTable.getItems().clear();
+                ordersTable.getItems().addAll(orders);
+            } else {
+                System.out.println("No orders found for user: " + username);
+            }
+        } else {
+            System.out.println("No user is currently logged in.");
+        }
+    }
+
+    
+    @FXML
+    private void loadUserOrders() throws SQLException {
+        String username = model.getCurrentUser().getUsername();  // Get the current user's username
+
+        List<Order> orders = model.getOrderDao().getUserOrders(username);  // Fetch user-specific orders
 
         if (orders != null && !orders.isEmpty()) {
             Collections.reverse(orders);  // Show recent orders first
@@ -71,33 +104,29 @@ public class OrdersController {
 
             ordersTable.getItems().clear();
             ordersTable.getItems().addAll(orders);
-
-            ordersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldOrder, newOrder) -> {
-                if (newOrder != null) {
-                    populateBooks(newOrder);  // Populate books for the selected order
-                }
-            });
         } else {
-            System.out.println("No orders found.");
+            System.out.println("No orders found for the user.");
         }
     }
 
+    
     @FXML
     private void populateBooks(Order order) {
-        ObservableList<Book> books = FXCollections.observableArrayList(order.getBooksPurchased().keySet());
+        ObservableList<OrderBookEntry> books = FXCollections.observableArrayList();
 
-        bookTitleColumn.setCellValueFactory(cellData -> 
-            new SimpleStringProperty(cellData.getValue().getTitle()));
+        // Populate the list with book title and quantity
+        for (Map.Entry<Book, Integer> entry : order.getBooksPurchased().entrySet()) {
+            books.add(new OrderBookEntry(entry.getKey().getTitle(), entry.getValue()));
+        }
 
-        bookQuantityColumn.setCellValueFactory(cellData -> {
-        	Book book = cellData.getValue();
-            int quantity = order.getBooksPurchased().getOrDefault(book, 0);
-            return new SimpleIntegerProperty(quantity).asObject();  // Wrap in SimpleIntegerProperty
-        });
+        // Set the cell value factories
+        bookTitleColumn.setCellValueFactory(cellData -> new SimpleStringProperty(order.getBookTitle()));
+        bookQuantityColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(order.getQuantity()).asObject());
 
-        booksTable.getItems().clear();
-        booksTable.getItems().addAll(books);
+        // Populate the table with book entries
+        booksTable.setItems(books);
     }
+
 
     @FXML
     private void closeOrdersView() {
