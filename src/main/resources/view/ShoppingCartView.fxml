@@ -10,15 +10,20 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="574.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ShoppingCartController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="574.0" prefWidth="871.0"
+      xmlns="http://javafx.com/javafx/23"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controller.ShoppingCartController">
    <children>
       <!-- TableView for displaying cart items -->
-      <TableView fx:id="cartTableView" layoutX="41.0" layoutY="118.0" prefHeight="237.0" prefWidth="789.0" style="-fx-background-color: #80B3FF;">
-        <columns>
-          <TableColumn fx:id="titleColumn" prefWidth="440.8000304698944" text="Title" />
-          <TableColumn fx:id="quantityColumn" minWidth="0.0" prefWidth="160.0" text="Quantity" />
-          <TableColumn fx:id="costColumn" prefWidth="186.39996337890625" text="Cost" />
-        </columns>
+      <TableView fx:id="cartTableView" layoutX="41.0" layoutY="118.0" prefHeight="237.0" prefWidth="789.0"
+                 style="-fx-background-color: #80B3FF;">
+         <columns>
+            <TableColumn fx:id="titleColumn" prefWidth="440.8" text="Title" />
+            <TableColumn fx:id="quantityColumn" prefWidth="160.0" text="Quantity" />
+            <TableColumn fx:id="costColumn" prefWidth="186.4" text="Cost" />
+         </columns>
       </TableView>
 
       <Text layoutX="301.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your Shopping Cart">
@@ -28,13 +33,19 @@
       </Text>
 
       <!-- Button to update quantity -->
-      <Button fx:id="updateQuantityButton" layoutX="306.0" layoutY="421.0" mnemonicParsing="false" onAction="#handleUpdateQuantity" prefHeight="31.0" prefWidth="117.0" style="-fx-background-color: #80B3FF;" text="Update Quantity" />
+      <Button fx:id="updateQuantityButton" layoutX="306.0" layoutY="421.0" mnemonicParsing="false"
+              onAction="#handleUpdateQuantity" prefHeight="31.0" prefWidth="117.0"
+              style="-fx-background-color: #80B3FF;" text="Update Quantity" />
 
       <!-- Button to remove book -->
-      <Button fx:id="removeBookButton" layoutX="509.0" layoutY="421.0" mnemonicParsing="false" onAction="#handleRemoveBook" prefHeight="31.0" prefWidth="105.0" style="-fx-background-color: #F95454;" text="Remove Book" />
+      <Button fx:id="removeBookButton" layoutX="509.0" layoutY="421.0" mnemonicParsing="false"
+              onAction="#handleRemoveBook" prefHeight="31.0" prefWidth="105.0"
+              style="-fx-background-color: #F95454;" text="Remove Book" />
 
-      <!-- Button to checkout -->
-      <Button fx:id="checkoutButton" layoutX="423.0" layoutY="529.0" mnemonicParsing="false" onAction="#handleCheckout" prefHeight="31.0" prefWidth="83.0" style="-fx-background-color: #86D293;" text="CheckOut" />
+      <!-- Checkout Button -->
+      <Button fx:id="checkoutButton" layoutX="423.0" layoutY="529.0" mnemonicParsing="false"
+              onAction="#handleCheckout" prefHeight="31.0" prefWidth="150.0"
+              style="-fx-background-color: #86D293;" text="Checkout" />
 
       <!-- TextField for entering quantity to update -->
       <Text layoutX="306.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select quantity to Update:">
@@ -42,14 +53,18 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <TextField fx:id="quantityField" layoutX="509.0" layoutY="371.0" promptText="Enter new quantity" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
+
+      <TextField fx:id="quantityField" layoutX="509.0" layoutY="371.0" promptText="Enter new quantity"
+                 style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px;
+                        -fx-border-color: #5272F2;" />
 
       <!-- AnchorPane for status and total cost messages -->
       <AnchorPane fx:id="statusPane" layoutX="398.0" layoutY="488.0" prefHeight="41.0" prefWidth="326.0">
-          <children>
-              <Label fx:id="totalCostLabel" layoutX="-44.0" layoutY="-6.0" style="-fx-font-size: 16px;" text="Total Cost: $" />
-              <Label fx:id="statusLabel" layoutX="0.0" layoutY="20.0" style="-fx-text-fill: red;" />
-          </children>
+         <children>
+            <Label fx:id="totalCostLabel" layoutX="-44.0" layoutY="-6.0" style="-fx-font-size: 16px;"
+                   text="Total Cost: $" />
+            <Label fx:id="statusLabel" layoutX="0.0" layoutY="20.0" style="-fx-text-fill: red;" />
+         </children>
       </AnchorPane>
    </children>
 </Pane>

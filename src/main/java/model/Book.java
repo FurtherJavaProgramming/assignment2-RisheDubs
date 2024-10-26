@@ -10,6 +10,11 @@ public class Book {
     // No-argument constructor (add this)
     public Book() {
     }
+    
+    // Constructor that accepts only the title
+    public Book(String title) {
+        this.title = title;
+    }
 
     // Parameterized constructor
     public Book(String title, String author, int physicalCopies, double price, int soldCopies) {
