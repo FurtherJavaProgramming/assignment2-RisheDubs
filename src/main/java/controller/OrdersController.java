@@ -2,15 +2,19 @@ package controller;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import model.Book;
 import model.Model;
 import model.Order;
 
+import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -18,12 +22,13 @@ import java.util.List;
 public class OrdersController {
 
     private Model model;
+    private Stage stage;
 
     @FXML
-    private Pane ordersPane;  // Pane as the root layout
+    private Pane ordersPane;
 
     @FXML
-    private TableView<Order> ordersTable;  // TableView to display orders
+    private TableView<Order> ordersTable;
 
     @FXML
     private TableColumn<Order, String> orderNumberColumn;
@@ -35,7 +40,7 @@ public class OrdersController {
     private TableColumn<Order, Double> totalPriceColumn;
 
     @FXML
-    private TableView<Book> booksTable;  // TableView to display books in each order
+    private TableView<Book> booksTable;
 
     @FXML
     private TableColumn<Book, String> bookTitleColumn;
@@ -43,48 +48,59 @@ public class OrdersController {
     @FXML
     private TableColumn<Book, Integer> bookQuantityColumn;
 
-    public void setModel(Model model) {
+    public void setModel(Model model) throws SQLException {
         this.model = model;
         loadOrders();  // Load orders when the model is set
     }
 
-    // Load the orders in reverse chronological order
-    private void loadOrders() {
-        List<Order> orders = model.getOrders();
-        if (orders != null) {
-            Collections.reverse(orders);  // Reverse the order list to display most recent orders first
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
-            // Set the cell value factories for the orders table
+    @FXML
+    private void loadOrders() throws SQLException {
+        List<Order> orders = model.getOrders();  // Fetch orders from the database
+
+        if (orders != null && !orders.isEmpty()) {
+            Collections.reverse(orders);  // Show recent orders first
+
             orderNumberColumn.setCellValueFactory(new PropertyValueFactory<>("orderNumber"));
-            dateTimeColumn.setCellValueFactory(cellData -> 
+            dateTimeColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))));
             totalPriceColumn.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
 
-            // Populate the orders table
-            ordersTable.getItems().setAll(orders);
+            ordersTable.getItems().clear();
+            ordersTable.getItems().addAll(orders);
 
-            // Add a listener to load books when an order is selected
-            ordersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-                if (newSelection != null) {
-                    loadBooksForOrder(newSelection);
+            ordersTable.getSelectionModel().selectedItemProperty().addListener((obs, oldOrder, newOrder) -> {
+                if (newOrder != null) {
+                    populateBooks(newOrder);  // Populate books for the selected order
                 }
             });
+        } else {
+            System.out.println("No orders found.");
         }
     }
 
-    // Load books for the selected order
-    private void loadBooksForOrder(Order order) {
-        bookTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+    @FXML
+    private void populateBooks(Order order) {
+        ObservableList<Book> books = FXCollections.observableArrayList(order.getBooksPurchased().keySet());
 
-        // Use a lambda to retrieve the correct quantity for each book in the order
+        bookTitleColumn.setCellValueFactory(cellData -> 
+            new SimpleStringProperty(cellData.getValue().getTitle()));
+
         bookQuantityColumn.setCellValueFactory(cellData -> {
-            Book book = cellData.getValue();  // Get the current Book
-            Integer quantity = order.getBooksPurchased().get(book);  // Get the quantity of the book in this order
-            return new SimpleIntegerProperty(quantity).asObject();  // Wrap it in SimpleIntegerProperty for the TableView
+        	Book book = cellData.getValue();
+            int quantity = order.getBooksPurchased().getOrDefault(book, 0);
+            return new SimpleIntegerProperty(quantity).asObject();  // Wrap in SimpleIntegerProperty
         });
 
-        // Clear the books table and add books from the selected order
         booksTable.getItems().clear();
-        booksTable.getItems().addAll(order.getBooksPurchased().keySet());  // Add the books from the order
+        booksTable.getItems().addAll(books);
+    }
+
+    @FXML
+    private void closeOrdersView() {
+        stage.close();  // Close the orders view
     }
 }
