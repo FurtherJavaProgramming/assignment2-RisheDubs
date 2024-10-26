@@ -187,7 +187,7 @@ public class ShoppingCartController {
 
             CheckoutController checkoutController = loader.getController();
             checkoutController.setCart(cart);
-            checkoutController.setModel(this.model);  // Pass the model to access the user ID
+            checkoutController.setModel(this.model);  // Pass the model
             checkoutController.setStage(stage);
 
             Scene checkoutScene = new Scene(checkoutRoot);

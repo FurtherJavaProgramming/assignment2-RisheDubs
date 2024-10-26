@@ -6,13 +6,13 @@ import java.util.Map;
 import java.util.Random;
 
 public class Order {
-    private String orderNumber;  // Keep order number as String for flexibility
+    private String orderNumber;  // String to store order number
     private String username;
     private LocalDateTime orderDate;
     private double totalPrice;
     private String bookTitle;
     private int quantity;
-    private Map<Book, Integer> booksPurchased = new HashMap<>();  // Initialize the map directly
+    private Map<Book, Integer> booksPurchased = new HashMap<>();
 
     // Constructor for new orders with username
     public Order(String username, LocalDateTime orderDate, double totalPrice) {
@@ -34,8 +34,9 @@ public class Order {
     // Generate a random 6-digit order number
     private String generateOrderNumber() {
         int randomOrderNumber = new Random().nextInt(900000) + 100000;  // Range: 100000-999999
-        return String.valueOf(randomOrderNumber);
+        return String.valueOf(randomOrderNumber);  // Store as numeric string
     }
+
 
     // Getters and Setters
     public String getOrderNumber() {
