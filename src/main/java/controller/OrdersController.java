@@ -9,12 +9,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Book;
 import model.Model;
 import model.Order;
 import model.OrderBookEntry;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -125,6 +130,58 @@ public class OrdersController {
 
         // Populate the table with book entries
         booksTable.setItems(books);
+    }
+    
+    @FXML
+    private void handleExportSelectedOrders() {
+        ObservableList<Order> selectedOrders = ordersTable.getSelectionModel().getSelectedItems();
+        if (selectedOrders.isEmpty()) {
+            System.out.println("No orders selected for export.");
+        } else {
+            exportOrdersToCSV(selectedOrders, "selected_orders.csv");
+        }
+    }
+
+    @FXML
+    private void handleExportAllOrders() {
+        try {
+            List<Order> allOrders = model.getOrderDao().getUserOrders(model.getCurrentUser().getUsername());
+            exportOrdersToCSV(FXCollections.observableArrayList(allOrders), "all_orders.csv");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void exportOrdersToCSV(ObservableList<Order> orders, String fileName) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialFileName(fileName);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        File file = fileChooser.showSaveDialog(stage);
+
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+                // Write the header
+                writer.write("Order Number,Date & Time,Total Price,Book Title,Quantity");
+                writer.newLine();
+
+                // Write the data
+                for (Order order : orders) {
+                    String row = String.format("%s,%s,%.2f,%s,%d",
+                            order.getOrderNumber(),
+                            order.getDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")),
+                            order.getTotalPrice(),
+                            order.getBookTitle(),
+                            order.getQuantity());
+                    writer.write(row);
+                    writer.newLine();
+                }
+                System.out.println("Export successful.");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Export canceled.");
+        }
     }
 
 

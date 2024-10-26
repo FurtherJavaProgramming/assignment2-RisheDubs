@@ -4,6 +4,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>  <!-- Import HBox -->
 
 <VBox xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="controller.OrdersController" spacing="10" prefWidth="600.0" prefHeight="600.0">
@@ -18,5 +19,9 @@
             </columns>
         </TableView>
         <Button fx:id="closeButton" text="Close" prefWidth="100.0" onAction="#closeOrdersView"/>
+        <HBox spacing="10">
+            <Button fx:id="exportSelectedButton" text="Export Selected Orders" onAction="#handleExportSelectedOrders"/>
+            <Button fx:id="exportAllButton" text="Export All Orders" onAction="#handleExportAllOrders"/>
+        </HBox>
     </children>
 </VBox>
