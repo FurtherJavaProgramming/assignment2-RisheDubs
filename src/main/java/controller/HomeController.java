@@ -2,7 +2,10 @@ package controller;
 
 import model.Book;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -179,6 +182,29 @@ public class HomeController {
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+    }
+    
+    @FXML
+    private void handleLogout() {
+        // Confirmation alert
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, 
+                "Are you sure you want to log out?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                try {
+                    // Load the login view
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
+                    Scene loginScene = new Scene(loader.load());
+
+                    // Set the login scene and show it
+                    stage.setScene(loginScene);
+                    stage.setTitle("Login");
+                    stage.show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
     
 }

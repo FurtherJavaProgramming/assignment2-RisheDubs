@@ -32,6 +32,7 @@
                 <Button fx:id="shoppingCartButton" text="Go to Shopping Cart" prefWidth="200.0" />
                 <Button fx:id="orderBooksButton" text="Order Books" prefWidth="200.0" />
                 <Button fx:id="viewOrdersButton" text="View Orders" prefWidth="200.0" onAction="#openOrdersPage" />
+                <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout" />
             </children>
         </VBox>
     </children>
