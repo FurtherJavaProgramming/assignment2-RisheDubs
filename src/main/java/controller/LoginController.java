@@ -62,6 +62,7 @@ public class LoginController {
     }
 
     // Handle login validation and logic
+ // Handle login validation and logic
     private void handleLogin() {
         if (name.getText().isEmpty() || password.getText().isEmpty()) {
             message.setText("Username or password cannot be empty.");
@@ -70,10 +71,15 @@ public class LoginController {
             try {
                 // Fetch user by username and password
                 User user = model.getUserDao().getUser(name.getText(), password.getText());
-                
+
                 if (user != null) {
                     model.setCurrentUser(user);  // Set the current user in the model
-                    loadHomePage();              // Redirect to home page
+
+                    if (user.getUsername().equals("admin")) {
+                        loadAdminPage();  // Redirect admin to the admin page
+                    } else {
+                        loadHomePage();  // Redirect regular users to the home page
+                    }
                 } else {
                     message.setText("Invalid username or password.");
                     message.setTextFill(Color.RED);
@@ -83,6 +89,25 @@ public class LoginController {
                 message.setTextFill(Color.RED);
                 e.printStackTrace();
             }
+        }
+    }
+
+    // Load the admin page (if applicable)
+    private void loadAdminPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/AdminView.fxml"));
+            VBox adminRoot = loader.load();  // Ensure the FXML root is of the correct type
+
+            AdminController adminController = loader.getController();
+            adminController.setModel(model);
+            adminController.setStage(stage);
+
+            Scene adminScene = new Scene(adminRoot);
+            stage.setScene(adminScene);
+            stage.setTitle("Admin Dashboard");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
