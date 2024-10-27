@@ -13,9 +13,8 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public void setup() throws SQLException {
-        // Create the books table if it doesn't exist
         String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
-                + "title TEXT, "
+                + "title TEXT PRIMARY KEY, "
                 + "author TEXT, "
                 + "physical_copies INTEGER, "
                 + "price REAL, "
@@ -28,7 +27,7 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> getTop5Books() throws SQLException {
-        String sql = "SELECT * FROM books ORDER BY sold_copies DESC LIMIT 5";  // Make sure the query is correct
+        String sql = "SELECT * FROM books ORDER BY sold_copies DESC LIMIT 5";
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
@@ -47,7 +46,7 @@ public class BookDaoImpl implements BookDao {
             return books;
         }
     }
-    
+
     @Override
     public boolean isStockAvailable(Book book, int quantity) throws SQLException {
         String sql = "SELECT physical_copies FROM books WHERE title = ?";
@@ -61,19 +60,22 @@ public class BookDaoImpl implements BookDao {
                 }
             }
         }
-        return false;  // Return false if no copies are available
+        return false;
     }
-    
+
+    @Override
     public void updateStock(Book book, int quantitySold) throws SQLException {
-        String sql = "UPDATE books SET physical_copies = physical_copies - ? WHERE title = ?";
+        String sql = "UPDATE books SET physical_copies = physical_copies - ?, "
+                   + "sold_copies = sold_copies + ? WHERE title = ?";
         try (Connection connection = Database.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, quantitySold);
-            stmt.setString(2, book.getTitle());
+            stmt.setInt(2, quantitySold);  // Update sold copies
+            stmt.setString(3, book.getTitle());
             stmt.executeUpdate();
         }
     }
-    
+
     @Override
     public Book getBookByTitle(String title) throws SQLException {
         String query = "SELECT * FROM books WHERE title = ?";
@@ -83,7 +85,6 @@ public class BookDaoImpl implements BookDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                // Assuming your Book constructor has parameters like this:
                 return new Book(
                     rs.getString("title"),
                     rs.getString("author"),
@@ -93,9 +94,10 @@ public class BookDaoImpl implements BookDao {
                 );
             }
         }
-        return null;  // Return null if no book found
+        return null;
     }
-    
+
+    @Override
     public List<Book> getAllBooks() throws SQLException {
         List<Book> books = new ArrayList<>();
         String query = "SELECT * FROM books";
@@ -105,18 +107,27 @@ public class BookDaoImpl implements BookDao {
              ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
-                Book book = new Book();
-                book.setTitle(rs.getString("title"));
-                book.setAuthor(rs.getString("author"));
-                book.setPhysicalCopies(rs.getInt("physical_copies"));
-                book.setPrice(rs.getDouble("price"));
-                book.setSoldCopies(rs.getInt("sold_copies"));
+                Book book = new Book(
+                    rs.getString("title"),
+                    rs.getString("author"),
+                    rs.getInt("physical_copies"),
+                    rs.getDouble("price"),
+                    rs.getInt("sold_copies")
+                );
                 books.add(book);
             }
         }
-        
         return books;
     }
 
-
+    @Override
+    public void updateBookStock(Book book) throws SQLException {
+        String sql = "UPDATE books SET physical_copies = ? WHERE title = ?";
+        try (Connection connection = Database.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, book.getPhysicalCopies());
+            stmt.setString(2, book.getTitle());
+            stmt.executeUpdate();
+        }
+    }
 }

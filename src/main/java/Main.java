@@ -6,6 +6,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import controller.LoginController;
 import model.Model;
@@ -23,7 +24,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             // Load the LoginView.fxml file
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/LoginView.fxml"));
+        	FXMLLoader loader = new FXMLLoader(
+                    Objects.requireNonNull(getClass().getResource("/view/LoginView.fxml"), 
+                    "LoginView.fxml not found.")
+                );
             
             // Since the new LoginView.fxml uses BorderPane as the root, cast it to BorderPane
             BorderPane root = loader.load();  // Changed from GridPane to BorderPane

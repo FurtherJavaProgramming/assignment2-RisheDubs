@@ -62,8 +62,14 @@ public class LoginController {
     }
 
     // Handle login validation and logic
- // Handle login validation and logic
     private void handleLogin() {
+    	
+    	 if (model == null) {
+    	        message.setText("Model is not initialized.");
+    	        message.setTextFill(Color.RED);
+    	        return;
+    	    }
+    	
         if (name.getText().isEmpty() || password.getText().isEmpty()) {
             message.setText("Username or password cannot be empty.");
             message.setTextFill(Color.RED);

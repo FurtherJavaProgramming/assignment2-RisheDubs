@@ -21,6 +21,9 @@ public interface BookDao {
     Book getBookByTitle(String title) throws SQLException;
     
     List<Book> getAllBooks() throws SQLException;
+    
+    // New method to update stock directly (for admin use)
+    void updateBookStock(Book book) throws SQLException;
 }
 
 
