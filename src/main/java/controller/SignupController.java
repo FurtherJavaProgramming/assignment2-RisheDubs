@@ -66,11 +66,11 @@ public class SignupController {
                 status.setText("User created successfully.");
                 status.setTextFill(Color.GREEN);
 
-                // Optionally, close the registration window and open login or dashboard page
-                stage.close();  // Assuming `stage` is already set correctly
+                // close the registration window and open login or dashboard page
+                stage.close();
 
             } catch (SQLException e) {
-                // If the error is due to a duplicate username, show the appropriate message
+                
                 if (e.getMessage().contains("Username already exists")) {
                     status.setText("Username already taken. Please choose another.");
                 } else {

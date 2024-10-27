@@ -138,7 +138,7 @@ public class ShoppingCartController {
         }
     }
 
-    // Method to handle order placement (new code)
+    // Method to handle order placement
     @FXML
     private void handlePlaceOrder() {
         if (cart.getCartItems().isEmpty()) {

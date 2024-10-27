@@ -23,7 +23,7 @@ public class OrderBooksController {
     private Stage stage;
 
     @FXML
-    private TableView<Book> availableBooksTableView;  // Update to TableView<Book>
+    private TableView<Book> availableBooksTableView;
 
     @FXML
     private TableColumn<Book, String> titleColumn;

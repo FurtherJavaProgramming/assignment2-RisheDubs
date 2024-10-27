@@ -61,7 +61,7 @@ public class Model {
         return shoppingCart;
     }
     
-    private List<Order> orders;  // Assuming you store orders in a List
+    private List<Order> orders;
 
     public List<Order> getOrders() throws SQLException {
         if (currentUser != null) {

@@ -28,7 +28,7 @@
             <!-- Lastname -->
             <TextField fx:id="lastName" layoutX="156.0" layoutY="265.0" prefHeight="26.0" prefWidth="185.0" promptText="Change Lastname" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
             
-            <!-- Password (Changed from TextField to PasswordField) -->
+            <!-- Password -->
             <PasswordField fx:id="password" layoutX="156.0" layoutY="325.0" prefHeight="26.0" prefWidth="185.0" promptText="Change Password" style="-fx-background-color: transparent; -fx-border-width: 0px 0px 2px 0px; -fx-border-color: #5272F2;" />
             
             <!-- Save and Cancel Buttons -->
@@ -43,8 +43,7 @@
          </children>
       </AnchorPane>
    </left>
-   
-   <!-- Right section with image -->
+
    <right>
       <AnchorPane prefHeight="500.0" prefWidth="212.0" style="-fx-background-color: #80B3FF;" BorderPane.alignment="CENTER" />
    </right>

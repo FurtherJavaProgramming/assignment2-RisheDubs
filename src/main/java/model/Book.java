@@ -7,7 +7,7 @@ public class Book {
     private double price;
     private int soldCopies;
 
-    // No-argument constructor (add this)
+    // No-argument constructor
     public Book() {
     }
     

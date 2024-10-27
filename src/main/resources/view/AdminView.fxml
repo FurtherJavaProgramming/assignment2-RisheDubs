@@ -6,21 +6,21 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController" spacing="10" prefWidth="600.0" prefHeight="600.0">
+<VBox prefHeight="600.0" prefWidth="600.0" spacing="10" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminController">
     <children>
         <!-- Table for displaying all books -->
-        <TableView fx:id="booksTable" prefHeight="400.0" prefWidth="580.0">
+        <TableView fx:id="booksTable" prefHeight="400.0" prefWidth="580.0" style="-fx-background-color: #77CDFF;">
             <columns>
-                <TableColumn fx:id="titleColumn" text="Title" prefWidth="150.0" />
-                <TableColumn fx:id="authorsColumn" text="Author" prefWidth="150.0" />
-                <TableColumn fx:id="priceColumn" text="Price" prefWidth="100.0" />
-                <TableColumn fx:id="soldCopiesColumn" text="Sold Copies" prefWidth="100.0" />
-                <TableColumn fx:id="stockColumn" text="Remaining Stock" prefWidth="100.0" />
+                <TableColumn fx:id="titleColumn" prefWidth="150.0" text="Title" />
+                <TableColumn fx:id="authorsColumn" prefWidth="150.0" text="Author" />
+                <TableColumn fx:id="priceColumn" prefWidth="100.0" text="Price" />
+                <TableColumn fx:id="soldCopiesColumn" prefWidth="100.0" text="Sold Copies" />
+                <TableColumn fx:id="stockColumn" prefWidth="100.0" text="Remaining Stock" />
             </columns>
         </TableView>
 
         <!-- Input and buttons for updating stock -->
-        <TextField fx:id="stockField" promptText="New Stock" prefWidth="100.0"/>
-        <Button fx:id="updateStockButton" text="Update Stock" onAction="#handleUpdateStock" prefWidth="150.0" />
+        <TextField fx:id="stockField" prefWidth="100.0" promptText="New Stock" />
+        <Button fx:id="updateStockButton" onAction="#handleUpdateStock" prefWidth="150.0" style="-fx-background-color: #86D293;" text="Update Stock" />
     </children>
 </VBox>

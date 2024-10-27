@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import controller.LoginController;
+import controller.SignupController;
 import model.Model;
 
 public class Main extends Application {
@@ -17,7 +18,7 @@ public class Main extends Application {
 
     @Override
     public void init() {
-        model = new Model();  // Initialize your model
+        model = new Model();
     }
 
     @Override
@@ -29,8 +30,7 @@ public class Main extends Application {
                     "LoginView.fxml not found.")
                 );
             
-            // Since the new LoginView.fxml uses BorderPane as the root, cast it to BorderPane
-            BorderPane root = loader.load();  // Changed from GridPane to BorderPane
+            BorderPane root = loader.load();
 
             // Get the controller instance from the FXML loader
             LoginController loginController = loader.getController();
@@ -40,10 +40,28 @@ public class Main extends Application {
             loginController.setModel(model);
 
             // Set up the scene and show the stage
-            Scene scene = new Scene(root);  // No need to change this part
+            Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Login Page");
             primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void loadSignupView(Stage stage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/SignupView.fxml"));
+            BorderPane signupRoot = loader.load();
+
+            SignupController signupController = loader.getController();
+            signupController.setModel(model);  // Pass the initialized model
+            signupController.setStage(stage);
+
+            Scene signupScene = new Scene(signupRoot);
+            stage.setScene(signupScene);
+            stage.setTitle("Signup Page");
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

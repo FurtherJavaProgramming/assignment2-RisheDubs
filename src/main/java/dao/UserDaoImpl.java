@@ -109,7 +109,7 @@ public class UserDaoImpl implements UserDao {
             
             stmt.setString(1, firstName);
             stmt.setString(2, lastName);
-            stmt.setString(3, password);  // Assume passwords are stored in plain text, consider hashing for production
+            stmt.setString(3, password);
             stmt.setString(4, username);
 
             int rowsUpdated = stmt.executeUpdate();

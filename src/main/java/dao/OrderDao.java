@@ -50,7 +50,7 @@ public class OrderDao {
 	    try (Connection conn = Database.getConnection();
 	         PreparedStatement orderStmt = conn.prepareStatement(insertOrderQuery)) {
 
-	        orderStmt.setString(1, order.getOrderNumber());  // Ensure this is bound as a string
+	        orderStmt.setString(1, order.getOrderNumber()); 
 	        orderStmt.setTimestamp(2, Timestamp.valueOf(order.getDateTime()));
 	        orderStmt.setDouble(3, order.getTotalPrice());
 	        orderStmt.setString(4, order.getUsername());  // Store the username

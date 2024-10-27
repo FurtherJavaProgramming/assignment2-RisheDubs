@@ -14,7 +14,7 @@ public class User {
         this.lastName = lastName;
     }
 
-    // Default constructor (if needed)
+    // Default constructor
     public User() {}
 
     // Getter and setter for username

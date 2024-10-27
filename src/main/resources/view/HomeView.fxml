@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -9,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController" fx:id="rootPane">
+<AnchorPane fx:id="rootPane" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HomeController">
     <children>
-        <VBox prefHeight="450.0" prefWidth="544.0" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <VBox prefHeight="450.0" prefWidth="544.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <MenuBar fx:id="menu" prefHeight="25.0" prefWidth="870.0" VBox.vgrow="NEVER">
                     <menus>
@@ -24,15 +25,18 @@
                     </menus>
                 </MenuBar>
 
-                <Label fx:id="welcomeLabel" text="Welcome!" prefHeight="50.0" prefWidth="400.0" style="-fx-font-size: 20px;" />
+                <Label fx:id="welcomeLabel" prefHeight="50.0" prefWidth="400.0" style="-fx-font-size: 20px;" text="Welcome!" />
 
-                <Label text="Top 5 Popular Books" style="-fx-font-size: 16px;" />
-                <ListView fx:id="booksListView" prefHeight="200.0" prefWidth="400.0" />
+                <Label style="-fx-font-size: 16px;" text="Top 5 Popular Books" />
+                <ListView fx:id="booksListView" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: #77CDFF;" />
 
-                <Button fx:id="shoppingCartButton" text="Go to Shopping Cart" prefWidth="200.0" />
-                <Button fx:id="orderBooksButton" text="Order Books" prefWidth="200.0" />
-                <Button fx:id="viewOrdersButton" text="View Orders" prefWidth="200.0" onAction="#openOrdersPage" />
-                <Button fx:id="logoutButton" text="Logout" onAction="#handleLogout" />
+                <Button fx:id="shoppingCartButton" prefHeight="26.0" prefWidth="172.0" text="Go to Shopping Cart">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></Button>
+                <Button fx:id="orderBooksButton" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="154.0" text="Order Books" />
+                <Button fx:id="viewOrdersButton" onAction="#openOrdersPage" prefHeight="26.0" prefWidth="137.0" text="View Orders" />
+                <Button fx:id="logoutButton" onAction="#handleLogout" prefHeight="26.0" prefWidth="122.0" style="-fx-background-color: #F95454;" text="Logout" />
             </children>
         </VBox>
     </children>

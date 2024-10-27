@@ -51,7 +51,7 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        // Add event handler for login button
+        // event handler for login button
         login.setOnAction(event -> {
             // No SQLException should be caught here directly, as handleLogin() may handle it internally
             handleLogin();  // Call handleLogin without the try-catch here
@@ -151,15 +151,13 @@ public class LoginController {
             // Load the HomeView.fxml, make sure the path is correct
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/HomeView.fxml"));
 
-            // Since the root is an AnchorPane, cast it correctly
             AnchorPane homeRoot = loader.load();  
 
-            // Get the HomeController and set the model and stage
             HomeController homeController = loader.getController();
             homeController.setModel(model);
             homeController.setStage(stage);
 
-            // Create a new scene with the correct root node
+            // Create a new scene with root node
             Scene homeScene = new Scene(homeRoot);
             stage.setScene(homeScene);
             stage.setTitle("Home");

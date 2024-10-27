@@ -23,11 +23,11 @@ public class CheckoutController {
 
     private ShoppingCart cart;
     private Model model;
-    private Stage stage;  // Add a field to store the stage
+    private Stage stage; 
     private double totalPrice;
 
     @FXML
-    private Text totalPriceLabel;  // Changed to Text for the new FXML design
+    private Text totalPriceLabel;
 
     @FXML
     private TextField cardNumberField;  // For the card number input
